@@ -1,36 +1,36 @@
 /*
 Copyright (C) 2002 Scott Long (link@kansastubacrew.com)
- 
+
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation; either version 2
 of the License, or (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- 
+
 */
 
 /* Modification History **
 **************************
-** 
+**
 ** LAST MODIFICATION DATE: 10 June 2002
 ** Author: Rick Dearman
-** 1) Modified all defined items to allow them to be user defined instead. 
+** 1) Modified all defined items to allow them to be user defined instead.
 **    With one exception which was the MAXJUMPPERCENT which was caused problems
-**    with other defined items in the universe.h file. 
+**    with other defined items in the universe.h file.
 **
-** 2) Modified all comments from // to C comments in case a users complier isn't C99 
+** 2) Modified all comments from // to C comments in case a users complier isn't C99
 **    complilant. (like some older Sun or HP compilers)
 **
 ** 3) Added random name generation for the ports.
-** 
+**
 ** 4) Added consellation names for sectors.
 **
 ** 5) Added randomly placed Ferringhi sector.
@@ -49,8 +49,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <time.h>
 #include <unistd.h>
 
-#if !defined (__FreeBSD__) && !defined(__NetBSD__) && !defined(__OpenBSD__)
-#include <getopt.h>
+#if !defined (__FreeBSD__) && !defined(__NetBSD__) && !defined(__OpenBSD__) && !defined(TARGET_OS_MAC)
+//#include <getopt.h>
 #endif
 
 #include "baseconfig.h"
@@ -167,7 +167,7 @@ main (int argc, char **argv)
     char *usageinfo =
         "Usage: bigbang [options]\n    Options:-t < integer >\n    indicate the max length of tunnels and dead ends.(default /minimum 6)\n    - s < integer >\n    indicate the max number of sectors.(default /minimum 500)\n    - p < integer >\n    indicate the max number of ports which MUST be at least 10 LESS than the\n    number of sectors.(default /minimum 190)\n    - o < integer >\n    indicate the percentage chance that a final jump will be a one -\n    way.(default /minimum 3)\n    - d < integer >\n    indicate the percentage chance that a tunnel will be a dead end.\n    (default /minimum 30)\n    - g < integer > generate a number of random planets.(default 0) \n     - n < integer > indicate number of Nodes in universe(default 1).\n       Nodes are partially disconnected subuniverses that are only connected \n       from certain ports.\n";
     /* This has to be taken out because of the knockon affect it was having with the rest of the program.
-       -j <integer>  indicate the percentage of sectors that will have the maximum number of warps in them. (must be between 3 and 7) 
+       -j <integer>  indicate the percentage of sectors that will have the maximum number of warps in them. (must be between 3 and 7)
      */
     opterr = 0;
 
@@ -231,7 +231,7 @@ main (int argc, char **argv)
                  "The max number of sectors MUST be greater than the number of ports. Program aborted.");
         exit (0);
     }
-	 
+
     tmpname = malloc (sizeof (strNameLength));
 
     /*  Seed our randomizer */
@@ -256,7 +256,7 @@ main (int argc, char **argv)
 		sectorlist[x] = NULL;
 		bigsectorlist[x] = NULL;
 	 }
-	 
+
     sectors = sectorlist;
 
     printf ("Creating port array...");
@@ -281,7 +281,7 @@ main (int argc, char **argv)
 		  {
 				numSectors = numSectors + 10;
 		  }
-		  
+
     	  maxjumpsize = (int) (numSectors * ((double) percentJump / 100));
     	  randsectornum = (int *) malloc ((numSectors - 11) * sizeof (int));
 
@@ -292,12 +292,12 @@ main (int argc, char **argv)
 			{
 				sectorlist[x]->sectorptr[y] = NULL;
 			}
-	 	  }	
+	 	  }
         /*  Fills in the randsectornum array with numbers 10 to (numsectors - 1) */
         for (x = 0; x < numSectors - 10; x++)
             randsectornum[x] = x + 10;
 
-        
+
     	  usedsecptr = numSectors - 11;
 		  printf ("Randomly picking sector numbers...");
         /*  Randomly creates sector numbers to use: */
@@ -453,7 +453,7 @@ main (int argc, char **argv)
 		  	{
 				bigsectorlist[x + totalsectorsdone] = sectorlist[x];
 				//fprintf(stderr, "Linking sector %d to sector %d\n", x+totalsectorsdone+1, x+1);
-				bigsectorlist[x + totalsectorsdone]->number = 
+				bigsectorlist[x + totalsectorsdone]->number =
 					  bigsectorlist[x + totalsectorsdone]->number + totalsectorsdone;
 		  	}
 		  }
@@ -472,7 +472,7 @@ main (int argc, char **argv)
 					//fprintf(stderr,"Linking sector %d to sector %d numSectors is %d x is %d\n", x+11, x+totalsectorsdone+1, numSectors, x);
 					sectorlist[x+10]->number = sectorlist[x+10]->number - 10;
 					bigsectorlist[x + totalsectorsdone] = sectorlist[x+10];
-					bigsectorlist[x + totalsectorsdone]->number = 
+					bigsectorlist[x + totalsectorsdone]->number =
 					  bigsectorlist[x + totalsectorsdone]->number + totalsectorsdone;
 				}
 			}
@@ -487,7 +487,7 @@ main (int argc, char **argv)
 								totalsectorsdone);
 		  }
 		  fflush(stdout);
-		  
+
 	 }
 	 sectorlist = bigsectorlist;
 	 numSectors = totalsectors;
@@ -502,7 +502,7 @@ main (int argc, char **argv)
 				sectorlist[counter]->sectorptr[x] = NULL;
 			sectorlist[counter]->sectorptr[0] = sectorlist[0];
 		}
-		else 
+		else
 		{
 			if (sectorlist[counter]->portptr != NULL)
 				sectorlist[counter]->portptr = NULL;
@@ -881,7 +881,7 @@ makeports ()
            	curport->maxproduct[1] = randomnum (2800, 3000);
            	curport->maxproduct[2] = randomnum (2800, 3000);
 		  }
-		  else 
+		  else
         {
             sprintf (name, "%s", tmpname);
             strcpy (curport->name, name);

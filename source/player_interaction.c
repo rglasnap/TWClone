@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2000 Jason C. Garcowski(jcg5@po.cwru.edu), 
+Copyright (C) 2000 Jason C. Garcowski(jcg5@po.cwru.edu),
                    Ryan Glasnapp(rglasnap@nmt.edu)
 
 This program is free software; you can redistribute it and/or
@@ -30,7 +30,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "player_interaction.h"
 
 /* handle_sockets
- * 
+ *
  * This function polls the main connection socket and accepts any incoming new connections.
  * It also handles all of the sockets for the players and reads and writes to them if needed
  * grabbing and tossing stuff on the msg queue if neccesairy.
@@ -42,7 +42,7 @@ struct sockinfo *headsock = NULL;
 void add_sock(int sockid, char *address)
 {
    struct sockinfo *newsock, *current;
-	
+
 	newsock = (struct sockinfo *)malloc(sizeof(struct sockinfo));
 	newsock->sockid = sockid;
 	newsock->loggedin = 0;
@@ -51,7 +51,7 @@ void add_sock(int sockid, char *address)
 	newsock->next = NULL;
 	strcpy(newsock->address, address);
 	strcpy(newsock->name, "\0");
-	
+
 	if (headsock==NULL)
 		headsock = newsock;
 	else
@@ -79,7 +79,7 @@ void add_sock(int sockid, char *address)
 	}
 
 }
-	
+
 int del_sock(struct sockinfo *deleteme)
 {
    struct sockinfo *current, *last=NULL;
@@ -109,7 +109,7 @@ int del_sock(struct sockinfo *deleteme)
 }
 
 /* handle_sockets
- * 
+ *
  * This function polls the main connection socket and accepts any incoming new connections.
  * It also handles all of the sockets for the players and reads and writes to them if needed
  * grabbing and tossing stuff on the msg queue if neccesairy.
@@ -157,7 +157,7 @@ void handle_sockets(int sockid, int msgidin, int msgidout)
 		perror("select()");
 		exit(1);
   	}
-  
+
   	//Write to the players sockets.
   	for (current=headsock; current!=NULL; current=current->next)
   	{
@@ -221,12 +221,12 @@ void handle_sockets(int sockid, int msgidin, int msgidout)
 int catchpipes(char *inbuff)
 {
    strcpy(inbuff, "QUIT:");
-   return;
+   return 1;
 }
 /*
   handle_player
 
-  This is the function that is run to parse what the player is sending to 
+  This is the function that is run to parse what the player is sending to
   the server and then toss it on the message queue.
 
 */
@@ -248,12 +248,12 @@ void handle_player (struct sockinfo *playersock, int msgidin, int msgidout)
   data.sockid = playersock->sockid;
   data.threadid = -1;
   strncpy(data.ipaddr, playersock->address, 15);
-  
+
   strncpy(name, playersock->name, strlen(playersock->name)+1);
   loggedin = playersock->loggedin;
 
   commandgood = 0;
-  
+
   outbuffer[0] = '\0';
   if (recvinfo (playersock->sockid, inbuffer) == -1)
   {
@@ -261,7 +261,7 @@ void handle_player (struct sockinfo *playersock, int msgidin, int msgidout)
 		fflush(stderr);
 		return;
   }
-	
+
 
       //parse stuff from client, should be expanded, modularized
       if (strncmp (inbuffer, "DESCRIPTION", strlen ("DESCRIPTION")) == 0
@@ -821,7 +821,7 @@ void handle_player (struct sockinfo *playersock, int msgidin, int msgidout)
       else
 		{
 			strcpy (outbuffer, "BAD: Invalid Command\n");
-			sendmesg(msgidout, outbuffer, (long)playersock->sockid); 
+			sendmesg(msgidout, outbuffer, (long)playersock->sockid);
 		}
 		//This used to catch bad events after login was sent
       if (!loggedin && strncmp (outbuffer, "BAD\n", 3) != 0

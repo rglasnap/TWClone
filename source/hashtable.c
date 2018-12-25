@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2000 Jason C. Garcowski(jcg5@po.cwru.edu), 
+Copyright (C) 2000 Jason C. Garcowski(jcg5@po.cwru.edu),
                    Ryan Glasnapp(rglasnap@nmt.edu)
 
 This program is free software; you can redistribute it and/or
@@ -45,8 +45,8 @@ void init_hash_table (struct list *hash_table[], int hash_length)
 
 /*********************************************\
  * find                                       |
- *                                            | 
- * desription: returns pointer to the         | 
+ *                                            |
+ * desription: returns pointer to the         |
  * location of the attributes of the input    |
  * symbol in the hash_table                   |
 \*********************************************/
@@ -285,29 +285,30 @@ void * insertitem (void *item, enum listtype type, struct list *hash_table[],
 
   e_pointer = hash_table[key];
   while (1)
+  {
+    if (e_pointer == NULL)
     {
-      if (e_pointer == NULL)
-	{
-	  hash_table[key] = new_element;
-	  return new_element->item;
-	}
-      else
-	{
+      hash_table[key] = new_element;
+      hash_table[key]->listptr = NULL;
+      return new_element->item;
+    }
+    else
+    {
 	  if (strcmp (((struct player *) (e_pointer->item))->name, symbol) ==
 	      0)
-	    {
-	      free (new_element);
-	      return NULL;
-	    }
-	  if (e_pointer->listptr != NULL)
+        {
+          free (new_element);
+          return NULL;
+        }
+    if (e_pointer->listptr != NULL)
 	    e_pointer = e_pointer->listptr;
 	  else
 	    {
 	      e_pointer->listptr = new_element;
 	      return new_element->item;
 	    }
-	}
     }
+  }
   perror ("this is a chaining HT, this should never be reached\n");
   return NULL;
 }
@@ -329,7 +330,10 @@ hash (const char *symbol, int hash_length)
   int temp_int = 0;
 
   while (symbol[x] != '\0')
-    temp_int += (int) symbol[x++] * pow (2, x);
+  {
+    temp_int += (int) symbol[x] * pow (2, x);
+    x++;
+  }
 
   return (temp_int % hash_length);
 }
