@@ -1,0 +1,10 @@
+*.o
+universe.data
+players.data
+ports.data
+planets.data
+tag*
+.tags*
+.deps*
+Makefile
+autom4te.cache/*
