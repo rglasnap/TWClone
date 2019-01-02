@@ -270,7 +270,7 @@ void * insertitem (void *item, enum listtype type, struct list *hash_table[],
 	    int hash_length)
 {
   int key;
-  struct list *new_element = (struct list *) malloc (sizeof (struct list *));
+  struct list *new_element = malloc (sizeof (struct list));
   struct list *e_pointer;
   char *symbol;
 

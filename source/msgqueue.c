@@ -27,6 +27,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <errno.h>
 #include "msgqueue.h"
 #include "common.h"
+#include "parse.h"
 
 int
 init_msgqueue ()

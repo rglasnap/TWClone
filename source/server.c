@@ -1,27 +1,27 @@
 /*
-Copyright (C) 2000 Jason C. Garcowski(jcg5@po.cwru.edu), 
+Copyright (C) 2000 Jason C. Garcowski(jcg5@po.cwru.edu),
                    Ryan Glasnapp(rglasnap@nmt.edu)
- 
+
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation; either version 2
 of the License, or (at your option) any later version.
- 
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- 
+
 */
 
 
 /* Modification History **
 **************************
-** 
+**
 ** LAST MODIFICATION DATE: 22 June 2002
 ** Author: Rick Dearman
 ** 1) Modified arguments to use getopt
@@ -35,7 +35,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
-#include <time.h>
+#include <sys/time.h>
 #include <ctype.h>
 #include "common.h"
 #include "universe.h"
@@ -77,7 +77,7 @@ int main (int argc, char *argv[])
     char buffer[BUFF_SIZE];
 	 struct timeval *lasttime, *curtime, *swap;
 	 struct b_maint *lmaint;
-	 
+
 	 lasttime = (struct timeval *)malloc(sizeof(struct timeval));
 	 curtime = (struct timeval *)malloc(sizeof(struct timeval));
 	 lmaint = (struct b_maint *)malloc(sizeof(struct b_maint));
@@ -130,7 +130,7 @@ int main (int argc, char *argv[])
 	 printf("initializing ship type data from 'shiptypes.data'...");
     init_shiptypeinfo("./shiptypes.data");
 	 printf("... Done!\n");
-	 
+
     printf ("initializing the universe from '%s'...", "universe.data");
     fflush (stdout);
     sectorcount = init_universe ("./universe.data", &sectors);
@@ -217,7 +217,7 @@ int main (int argc, char *argv[])
 		}while(senderid > 0);
 
 		background_maint(lmaint);
-		
+
 		swap = curtime;
 		curtime = lasttime;
 		lasttime = swap;
@@ -261,13 +261,13 @@ int main (int argc, char *argv[])
            printf ("Please run 'ipcrm msg %d'\n", msgidin);
         }
     }
-    else 
+    else
 	 {
          c++;
     }
     sprintf (buffer, "%d", msgidout);
     fprintf (stderr, "\nKilling message queue with id %s...", buffer);
-    if(msgctl(msgidout, IPC_RMID, NULL)==-1) 
+    if(msgctl(msgidout, IPC_RMID, NULL)==-1)
 	 {
        if (execlp ("ipcrm", "ipcrm", "msg", buffer, NULL) < 0)
        {
@@ -275,7 +275,7 @@ int main (int argc, char *argv[])
            printf ("Please run 'ipcrm msg %d'\n", msgidout);
        }
     }
-    else 
+    else
 	 {
          c++;
          fprintf(stderr, "\n");

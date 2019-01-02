@@ -533,12 +533,12 @@ main (int argc, char **argv)
     for (loop = 1; loop <= 299 - strlen(terraInfo); loop++)
         strcat(terraInfo, " ");
     strcat(terraInfo, "\n");
-    fprintf (planetfile, terraInfo);
+    fprintf (planetfile, "%s", terraInfo);
     sprintf (ferrinfo, "%d:%d:Ferringhi:1:-2:Unknown:1000:1000:1000:0:0:0:0:3:100000:20:30:10:0:0:0:0:", 2, ferringhiSector);
     for (loop = 1; loop <= 299 - strlen(ferrinfo); loop++)
         strcat(ferrinfo, " ");
     strcat(ferrinfo, "\n");
-    fprintf(planetfile, ferrinfo);
+    fprintf(planetfile, "%s", ferrinfo);
     randomPlanetInfo = malloc (sizeof (strNameLength));
     if (numRandomPlanets > 0)
     {
@@ -555,7 +555,7 @@ main (int argc, char **argv)
             for (loop = 1; loop <= 299 - strlen(ferrinfo); loop++)
                 strcat(ferrinfo, " ");
             strcat(ferrinfo, "\n");
-            fprintf(planetfile, ferrinfo);
+            fprintf(planetfile, "%s", ferrinfo);
 
             c++;
         }
@@ -625,7 +625,7 @@ main (int argc, char **argv)
         fileline = strcat (fileline, ":\n");
         /*  Later put in whitespace buffer for saving */
         /*  Not needed until user created beacons put in */
-        fprintf (file, fileline);
+        fprintf (file, "%s", fileline);
     }
     fclose (file);
     free (fileline);
@@ -653,7 +653,7 @@ main (int argc, char **argv)
         for (y = 0; y <= 99 - len; y++)
             strcat (fileline, " ");
         strcat (fileline, "\n");
-        fprintf (file, fileline);
+        fprintf (file, "%s", fileline);
     }
     fclose (file);
 
@@ -763,6 +763,7 @@ int innode(int sector)
             return(counter);
         }
     }
+    return 0;
 }
 
 int numwarps (int sector)

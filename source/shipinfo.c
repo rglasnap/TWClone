@@ -1,9 +1,11 @@
 #include <string.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "shipinfo.h"
 #include "common.h"
 #include "baseconfig.h"
+#include "parse.h"
 
 extern struct config *configdata;
 extern struct sp_shipinfo **shiptypes;
@@ -39,7 +41,7 @@ void saveshiptypeinfo(char *filename)
  		addint(stufftosave, shiptypes[index]->holo, ':', BUFF_SIZE);
 		addint(stufftosave, shiptypes[index]->planet, ':', BUFF_SIZE);
  		addint(stufftosave, shiptypes[index]->photons, ':', BUFF_SIZE);
-		
+
 		len = strlen(stufftosave);
 		for (loop=1; loop <= 300 - len; loop++)
 			strcat(stufftosave, " ");
@@ -69,7 +71,7 @@ void init_shiptypeinfo (char *filename)
 		fprintf(stderr, "\ninit_shiptypeinfo: No shipinfo file!");
 		return;
 	}
-	
+
 	while(!done)
 	{
 		strcpy(buffer, "\0");
@@ -80,7 +82,7 @@ void init_shiptypeinfo (char *filename)
 			done=1;
 		else if (index < configdata->ship_type_count)
 		{
-			shiptypes[index] = 
+			shiptypes[index] =
 				(struct sp_shipinfo *)malloc(sizeof(struct sp_shipinfo));
 			if (shiptypes[index] != NULL)
 			{
@@ -108,7 +110,7 @@ void init_shiptypeinfo (char *filename)
 	}
 	fclose(shipfile);
 	free(buffer);
-		  
+
 		  /*  strcpy (shiptypes[0].name, "\x1B[0;32mMerchant Cruiser\x1B[0m");
   shiptypes[0].basecost = 41300;
   shiptypes[0].maxattack = 750;

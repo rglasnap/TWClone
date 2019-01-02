@@ -24,6 +24,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <unistd.h>
 #include <stdio.h>
 #include <string.h>
+#include <arpa/inet.h>
 #include "parse.h"
 #include "msgqueue.h"
 #include "common.h"

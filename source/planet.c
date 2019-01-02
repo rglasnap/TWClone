@@ -23,7 +23,7 @@ void saveplanets(char *filename)
 	char *stufftosave = (char *)malloc(sizeof(char)*BUFF_SIZE);
 
 	planetfile = fopen(filename, "w");
-	
+
 	for (index=0; index<configdata->max_total_planets; index++)
 	{
 		if (planets[index] != NULL)
@@ -60,7 +60,7 @@ void saveplanets(char *filename)
 		for (loop=0; loop< 399 - strlen(stufftosave); loop++)
 			strcat(stufftosave, " ");
 		strcat(stufftosave, "\n");
-		fprintf(planetfile, stufftosave);
+		fprintf(planetfile, "%s", stufftosave);
 		}
 	}
 	fclose(planetfile);
@@ -103,7 +103,7 @@ int init_planets (char *filename)
             (char *) malloc((MAX_NAME_LENGTH+1)* sizeof (char));
 		  planets[p_num - 1]->creator =
 				(char *)malloc(sizeof(char)*MAX_NAME_LENGTH);
-		  planets[p_num - 1]->citdl = 
+		  planets[p_num - 1]->citdl =
 				(struct citadel *)malloc(sizeof(struct citadel));
 
         p_sec = popint (buffer, ":");
@@ -135,7 +135,7 @@ int init_planets (char *filename)
 		  planets[p_num - 1]->citdl->transporterlvl = popint(buffer, ":");
 		  planets[p_num - 1]->citdl->interdictor = popint(buffer, ":");
 		  planets[p_num - 1]->citdl->upgradestart = popint(buffer, ":");
-        
+
 		  insert_planet (planets[p_num - 1], sectors[p_sec - 1], 0);
 		  }
     }
@@ -264,7 +264,7 @@ void init_planetinfo(char *filename)
 
 	planetTypes = (planetClass **)
 		malloc(sizeof(planetClass *)*configdata->number_of_planet_types);
-	
+
 	planetinfo = fopen(filename, "r");
 	if (planetinfo == NULL)
 	{
@@ -283,7 +283,7 @@ void init_planetinfo(char *filename)
 		{
 			planetTypes[index] =
 				(planetClass *)malloc(sizeof(planetClass));
-			planetTypes[index]->typeClass = 
+			planetTypes[index]->typeClass =
 				(char *)malloc(sizeof(char)*MAX_NAME_LENGTH*2);
 			planetTypes[index]->typeName =
 				(char *)malloc(sizeof(char)*MAX_NAME_LENGTH*2);
@@ -294,45 +294,45 @@ void init_planetinfo(char *filename)
 			popstring(buffer,temp,":", BUFF_SIZE);
 			for (loop=0;loop<MAX_CITADEL_LEVEL;loop++)
 			{
-				planetTypes[index]->citadelUpgradeTime[loop] = 
+				planetTypes[index]->citadelUpgradeTime[loop] =
 						  popint(temp, ",");
 			}
 			temp[0] = '\0';
 			popstring(buffer,temp,":", BUFF_SIZE);
 			for (loop=0;loop<MAX_CITADEL_LEVEL;loop++)
 			{
-				planetTypes[index]->citadelUpgradeOre[loop] = 
+				planetTypes[index]->citadelUpgradeOre[loop] =
 						  popint(temp, ",");
 			}
 			temp[0] = '\0';
 			popstring(buffer,temp,":", BUFF_SIZE);
 			for (loop=0;loop<MAX_CITADEL_LEVEL;loop++)
 			{
-				planetTypes[index]->citadelUpgradeOrganics[loop] = 
+				planetTypes[index]->citadelUpgradeOrganics[loop] =
 						  popint(temp, ",");
 			}
 			temp[0] = '\0';
 			popstring(buffer,temp,":", BUFF_SIZE);
 			for (loop=0;loop<MAX_CITADEL_LEVEL;loop++)
 			{
-				planetTypes[index]->citadelUpgradeEquipment[loop] = 
+				planetTypes[index]->citadelUpgradeEquipment[loop] =
 						  popint(temp, ",");
 			}
 			temp[0] = '\0';
 			popstring(buffer,temp,":", BUFF_SIZE);
 			for (loop=0;loop<MAX_CITADEL_LEVEL;loop++)
 			{
-				planetTypes[index]->citadelUpgradeColonist[loop] = 
+				planetTypes[index]->citadelUpgradeColonist[loop] =
 						  popint(temp, ",");
 			}
 			temp[0] = '\0';
 			popstring(buffer,temp,":", BUFF_SIZE);
 			for (loop=0;loop< 3;loop++)
 			{
-				planetTypes[index]->maxColonist[loop] = 
+				planetTypes[index]->maxColonist[loop] =
 						  popint(temp, ",");
 			}
-			
+
 			planetTypes[index]->fuelProduction = popint(buffer, ":");
 			planetTypes[index]->organicsProduction = popint(buffer, ":");
 			planetTypes[index]->equipmentProduction = popint(buffer, ":");
@@ -341,7 +341,7 @@ void init_planetinfo(char *filename)
 			planetTypes[index]->maxorganics = popint(buffer, ":");
 			planetTypes[index]->maxequipment = popint(buffer, ":");
 			planetTypes[index]->maxfighters = popint(buffer, ":");
-			
+
 			planetTypes[index]->breeding = (float)popint(buffer, ":")/1000.0;
 
 		}
