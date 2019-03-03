@@ -47,9 +47,10 @@ void add_sock(int sockid, char *address)
 	newsock = (struct sockinfo *)malloc(sizeof(struct sockinfo));
 	newsock->sockid = sockid;
 	newsock->loggedin = 0;
-	newsock->address = (char *)malloc(sizeof(address)+1);
+	newsock->address = (char *)malloc(strlen(address)+1);
 	newsock->name = (char *)malloc(sizeof(char)*80);
 	newsock->next = NULL;
+
 	strcpy(newsock->address, address);
 	strcpy(newsock->name, "\0");
 
@@ -140,6 +141,7 @@ void handle_sockets(int sockid, int msgidin, int msgidout)
   FD_SET(sockid, &reads);
   wcounter=0;
   rcounter=sockid;
+  last = headsock;
   for (current=headsock; current!=NULL; current=current->next)
   {
 			FD_SET(current->sockid, &reads);
@@ -168,7 +170,7 @@ void handle_sockets(int sockid, int msgidin, int msgidout)
 		  if (strncmp(outbuffer, "OK: Logging out", strlen("OK: Logging out"))==0)
 		  {
 				close(current->sockid);
-  				fprintf (stderr, "Socket %d: Just closed the socket, exiting\n", current->sockid);
+        fprintf (stderr, "Socket %d: Just closed the socket, exiting\n", current->sockid);
 				while (getmsg(msgidout, outbuffer, current->sockid)>0) ;
 				while (getmsg(msgidin, outbuffer, current->sockid)>0) ;
 				FD_CLR(current->sockid, &reads);
@@ -205,7 +207,7 @@ void handle_sockets(int sockid, int msgidin, int msgidout)
       exit (-1);
      }
 	  //Add the descriptor to the list
-	  add_sock(ret, (char *)inet_ntoa(clnt_sockaddr.sin_addr));
+	  add_sock(ret, inet_ntoa(clnt_sockaddr.sin_addr));
 	  fprintf(stderr, "Accepted socket %d from %s\n", ret, inet_ntoa(clnt_sockaddr.sin_addr));
   }
 
