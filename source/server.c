@@ -208,13 +208,15 @@ int main (int argc, char *argv[])
 		gettimeofday(curtime, 0);
   		do
 		{
-		senderid = getdata (msgidin, &data, 0);
-		if (senderid > 0)
-		{
-     	  processcommand (buffer, &data);
-  		  sendmesg (msgidout, buffer, senderid);
-		}
-		}while(senderid > 0);
+			senderid = getdata (msgidin, &data, 0);
+			if (senderid > 0)
+			{
+     			processcommand (buffer, &data);
+				sendmesg (msgidout, buffer, senderid);
+			}
+		}while(senderid >= 0);
+
+		processSysopCommands(msgidin);
 
 		background_maint(lmaint);
 

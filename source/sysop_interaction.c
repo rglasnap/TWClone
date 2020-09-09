@@ -22,38 +22,42 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <sys/poll.h>
 #include "msgqueue.h"
 #include "common.h"
 #include "player_interaction.h"
 #include "sysop_interaction.h"
 extern int WARP_WAIT;
 
-void *getsysopcommands (void *threadinfo)
+void processSysopCommands (int msgidin)
 {
-  int msgidin = ((struct connectinfo *) threadinfo)->msgidin;
+	//TODO: Make this actually send a command to the message queue for it to handle things properly. 
   struct msgcommand data;
   char buffer[BUFF_SIZE];
 
-  free (threadinfo);
+  struct pollfd checkInput[1];
 
-  while (1)
-    {
-      printf ("> ");
-      fgets (buffer, BUFF_SIZE, stdin);
-      buffer[strcspn (buffer, "\n")] = '\0';
-      if (strcmp (buffer, "QUIT") == 0)
-		{
-	  		data.command = ct_quit;
-			senddata (msgidin, &data, pthread_self ());
+  checkInput[0].fd = 0;
+  checkInput[0].events = POLLIN | POLLPRI;
+
+
+  if ( poll(checkInput, 1, 1) == 1) 
+  {
+	fgets(buffer, BUFF_SIZE, stdin);
+	buffer[strcspn(buffer, "\n")] = '\0';
+	if (strcmp(buffer, "QUIT") == 0)
+	{
+	  data.command = ct_quit;
+	  senddata(msgidin, &data, 0);
+	}
+	if (strcmp(buffer, "WARP_WAIT") == 0)
+	{
+	  WARP_WAIT = 1;
+	}
+	if (strcmp(buffer, "NOWARP_WAIT") == 0)
+	{
+	  WARP_WAIT = 0;
+	}
 		}
-		if (strcmp(buffer, "WARP_WAIT") == 0)
-		{
-			WARP_WAIT = 1;
-		}
-		if (strcmp(buffer, "NOWARP_WAIT") == 0)
-		{
-			WARP_WAIT = 0;
-		}
-    }
   return NULL;
 }
