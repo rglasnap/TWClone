@@ -98,9 +98,7 @@ int maxWarps = 0;
 /*  DON'T EVEN THINK ABOUT TOUCHING THESE... */
 const int fedspace[10][6] =
     {
-        {
-            2, 3, 4, 5, 6, 7
-        },
+        {2, 3, 4, 5, 6, 7},
         {1, 3, 7, 8, 9, 10},
         {1, 2, 4, 0, 0, 0},
         {1, 3, 5, 0, 0, 0},
@@ -138,8 +136,7 @@ extern int insert_planet (struct planet *p, struct sector *s);
 
 
 
-int
-main (int argc, char **argv)
+int main (int argc, char **argv)
 {
     int c;
     int loop;
@@ -232,7 +229,7 @@ main (int argc, char **argv)
         exit (0);
     }
 
-    tmpname = malloc (sizeof (strNameLength));
+    tmpname = (char *) malloc(strNameLength * sizeof(char) );
 
     /*  Seed our randomizer */
     srand ((unsigned int) time (NULL));
@@ -539,7 +536,7 @@ main (int argc, char **argv)
         strcat(ferrinfo, " ");
     strcat(ferrinfo, "\n");
     fprintf(planetfile, "%s", ferrinfo);
-    randomPlanetInfo = malloc (sizeof (strNameLength));
+    randomPlanetInfo = (char *) malloc(strNameLength * sizeof (char) );
     if (numRandomPlanets > 0)
     {
         c = 3;
@@ -613,7 +610,7 @@ main (int argc, char **argv)
         /* Adds in names for sectors */
         if (sectorlist[x]->nebulae == NULL)
         {
-            sectorlist[x]->nebulae = malloc (sizeof (strNameLength));
+            sectorlist[x]->nebulae = (char *)malloc(strNameLength * sizeof(char) );
             tmpname = consellationName (tmpname);
             sectorlist[x]->nebulae = tmpname;
         }
@@ -834,7 +831,7 @@ makeports ()
     char *tmpname;
 	 int curnode;
 
-    tmpname = malloc (sizeof (strNameLength));
+    tmpname = (char *)malloc(strNameLength * sizeof(char));
 
     for (loop = 0; loop < numPorts; loop++)
     {
