@@ -140,7 +140,6 @@ int main (int argc, char **argv)
 {
     int c;
     int loop;
-    char *tmpname;
     int x, y, z, tempint, randint, tosector, fromsector, startsec, secptrcpy,
     jumpsize;
     int maxjumpsize;
@@ -153,7 +152,9 @@ int main (int argc, char **argv)
     char *terraInfo = malloc(sizeof(char)*400);
     char *ferrinfo = malloc(sizeof(char)*400);
     char *plout = malloc(sizeof(char)*400);
-    char *randomPlanetInfo;
+    char *tmpname = (char *) malloc(strNameLength * sizeof(char) );
+    
+	char *randomPlanetInfo;
     int ferringhiSector;
     time_t datenow;
     int totalsectors = 0;
@@ -229,7 +230,6 @@ int main (int argc, char **argv)
         exit (0);
     }
 
-    tmpname = (char *) malloc(strNameLength * sizeof(char) );
 
     /*  Seed our randomizer */
     srand ((unsigned int) time (NULL));
@@ -562,6 +562,9 @@ int main (int argc, char **argv)
 
     printf ("Saving planets to file...");
     (void) fclose (planetfile);
+	free(ferrinfo);
+	free(terraInfo);
+	free(randomPlanetInfo);
     printf ("done.\n");
 
 
@@ -611,8 +614,7 @@ int main (int argc, char **argv)
         if (sectorlist[x]->nebulae == NULL)
         {
             sectorlist[x]->nebulae = (char *)malloc(strNameLength * sizeof(char) );
-            tmpname = consellationName (tmpname);
-            sectorlist[x]->nebulae = tmpname;
+            consellationName (sectorlist[x]->nebulae);
         }
         if (sectorlist[x]->beacontext != NULL)
             fileline = strcat (fileline, sectorlist[x]->beacontext);
@@ -627,6 +629,7 @@ int main (int argc, char **argv)
     fclose (file);
     free (fileline);
     free (tempstr);
+	free(tmpname);
     printf ("done.\n");
 
     /*  Writing data to ports.data file */
@@ -653,6 +656,8 @@ int main (int argc, char **argv)
         fprintf (file, "%s", fileline);
     }
     fclose (file);
+	free(fileline);
+	free(tempstr);
 
     printf ("done.\nUniverse sucessfully created!\n\n");
 
@@ -820,8 +825,7 @@ void sectorsort (struct sector *base[maxWarps], int elements)
     }
 }
 
-void
-makeports ()
+void makeports ()
 {
     struct port *curport;
     int type = 0;
@@ -837,7 +841,7 @@ makeports ()
     {
         curport = (struct port *) malloc (sizeof (struct port));
         curport->number = loop + 1;
-        tmpname = randomname (tmpname);
+        randomname (tmpname);
         curport->name = (char *) malloc (sizeof (char) * 80);
         strcpy (name, "\0");
 
@@ -969,4 +973,5 @@ makeports ()
             portlist[loop]->location = 1;
         sectorlist[sector]->portptr = portlist[loop];
     }
+	free(tmpname);
 }
