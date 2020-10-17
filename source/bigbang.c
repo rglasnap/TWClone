@@ -280,7 +280,7 @@ int main (int argc, char **argv)
 		  }
 
     	  maxjumpsize = (int) (numSectors * ((double) percentJump / 100));
-    	  randsectornum = (int *) malloc ((numSectors - 11) * sizeof (int));
+    	  randsectornum = (int *) malloc ((numSectors - 10) * sizeof (int));
 
     	  for (x = 0; x < numSectors; x++)
 	 	  {
@@ -592,6 +592,7 @@ int main (int argc, char **argv)
 
     /*  Writing data to universe.data file */
     printf ("Saving universe to file...");
+
     file = fopen ("./universe.data", "w");
 
     fileline = malloc (1024 * sizeof (char));

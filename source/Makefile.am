@@ -79,6 +79,8 @@ server_SOURCES = \
 	player_interaction.h \
 	portinfo.h \
 	server.c \
+	saveactions.c \
+	saveactions.h \
 	serveractions.c \
 	serveractions.h \
 	shipinfo.c \

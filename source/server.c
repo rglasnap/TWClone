@@ -48,6 +48,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "shipinfo.h"
 #include "baseconfig.h"
 #include "maint.h"
+#include "saveactions.h"
 
 struct sector **sectors;
 int sectorcount;
