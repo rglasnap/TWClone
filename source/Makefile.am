@@ -47,7 +47,9 @@ bigbang_SOURCES = \
 	parse.c \
 	parse.h \
 	planet.c \
-	planet.h
+	planet.h \
+	saveactions.c \
+	saveactions.h
 
 client_SOURCES = \
 	ansi.h \

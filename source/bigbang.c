@@ -55,6 +55,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "baseconfig.h"
 #include "universe.h"
+#include "saveactions.h"
 
 /*  This is the max length of tunnels and dead ends. */
 #define MAXTUNLEN		6
@@ -114,8 +115,14 @@ struct sector **sectorlist;
 struct sector **bigsectorlist;
 struct sector **sectors;
 struct config *configdata;
+
+//Needed so inclusion of save actions doesn't break.
+//TODO: Deal with unneeded/unused struct pointers better.
+
+struct player **players;
+struct ship **ships;
 /*  struct port *portlist[NUMPORTS]; */
-struct port **portlist;
+struct port **ports;
 /*  int randsectornum[NUMSECTORS-10]; */
 int *randsectornum;
 
@@ -257,10 +264,10 @@ int main (int argc, char **argv)
     sectors = sectorlist;
 
     printf ("Creating port array...");
-    portlist = malloc (numPorts * sizeof (struct port *));
+    ports = malloc (numPorts * sizeof (struct port *));
     for (x = 0; x < numPorts; x++)
     {
-        portlist[x] = NULL;
+        ports[x] = NULL;
     }
     printf ("done.\n\n");
 
@@ -635,30 +642,32 @@ int main (int argc, char **argv)
 
     /*  Writing data to ports.data file */
     printf ("Saving ports to file...");
-    file = fopen ("./ports.data", "w");
-    fileline = malloc (1024 * sizeof (char));
+	saveallports("./ports.data");
 
-    tempstr = malloc (10 * sizeof (char));
+ //   file = fopen ("./ports.data", "w");
+ //   fileline = malloc (1024 * sizeof (char));
 
-    for (x = 0; x < numPorts; x++)
-    {
-        sprintf (fileline, "%d:%s:%d:%d:%d:%d:%d:%d:%d:%ld:%d:%d", (x + 1),
-                 portlist[x]->name, portlist[x]->location,
-                 portlist[x]->maxproduct[0], portlist[x]->maxproduct[1],
-                 portlist[x]->maxproduct[2], portlist[x]->product[0],
-                 portlist[x]->product[1], portlist[x]->product[2],
-                 (long int) portlist[x]->credits, portlist[x]->type,
-                 (int) portlist[x]->invisible);
-        fileline = strcat (fileline, ":");
-        len = (int) strlen (fileline);
-        for (y = 0; y <= 99 - len; y++)
-            strcat (fileline, " ");
-        strcat (fileline, "\n");
-        fprintf (file, "%s", fileline);
-    }
-    fclose (file);
-	free(fileline);
-	free(tempstr);
+ //   tempstr = malloc (10 * sizeof (char));
+
+ //   for (x = 0; x < numPorts; x++)
+ //   {
+ //       sprintf (fileline, "%d:%s:%d:%d:%d:%d:%d:%d:%d:%ld:%d:%d", (x + 1),
+ //                portlist[x]->name, portlist[x]->location,
+ //                portlist[x]->maxproduct[0], portlist[x]->maxproduct[1],
+ //                portlist[x]->maxproduct[2], portlist[x]->product[0],
+ //                portlist[x]->product[1], portlist[x]->product[2],
+ //                (long int) portlist[x]->credits, portlist[x]->type,
+ //                (int) portlist[x]->invisible);
+ //       fileline = strcat (fileline, ":");
+ //       len = (int) strlen (fileline);
+ //       for (y = 0; y <= 99 - len; y++)
+ //           strcat (fileline, " ");
+ //       strcat (fileline, "\n");
+ //       fprintf (file, "%s", fileline);
+ //   }
+ //   fclose (file);
+	//free(fileline);
+	//free(tempstr);
 
     printf ("done.\nUniverse sucessfully created!\n\n");
 
@@ -932,7 +941,7 @@ void makeports ()
         default:
             break;
         }
-        portlist[loop] = curport;
+        ports[loop] = curport;
         curport = NULL;
 
         /*  Now for assigning the port to a sector */
@@ -943,7 +952,7 @@ void makeports ()
             	sector = randomnum (0, numSectors - 1);
             	while (sectorlist[sector]->portptr != NULL)
                 	sector = randomnum (0, numSectors - 1);
-            	portlist[loop]->location = sector + 1;
+            	ports[loop]->location = sector + 1;
 				}
 				else if ((loop > 3) && (loop <= numNodes+3))
 				{
@@ -959,7 +968,7 @@ void makeports ()
 							curnode = innode(sector+1);
 							}while(sectorlist[sector]->portptr!=NULL);
 					}
-					portlist[loop]->location = sector + 1;
+					ports[loop]->location = sector + 1;
 				}
 				else
 				{
@@ -967,12 +976,12 @@ void makeports ()
 					sector = randomnum (0, numSectors - 1);
             	while (sectorlist[sector]->portptr != NULL)
                 	sector = randomnum (0, NUMSECTORS - 1);
-            	portlist[loop]->location = sector + 1;
+            	ports[loop]->location = sector + 1;
 				}
         }
         else
-            portlist[loop]->location = 1;
-        sectorlist[sector]->portptr = portlist[loop];
+            ports[loop]->location = 1;
+        sectorlist[sector]->portptr = ports[loop];
     }
 	free(tmpname);
 }
