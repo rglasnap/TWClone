@@ -264,8 +264,11 @@ int main (int argc, char **argv)
     sectors = sectorlist;
 
     printf ("Creating port array...");
-    ports = malloc (numPorts * sizeof (struct port *));
-    for (x = 0; x < numPorts; x++)
+	//Allocating an extra port so we don't go outside allocated memory when saving. 
+	//Note: The server code allocated configdata->max_ports for the port array instead,
+	//  but that's not strictly neccesary here. 
+    ports = malloc ( (numPorts + 1) * sizeof (struct port *));
+    for (x = 0; x < numPorts + 1; x++)
     {
         ports[x] = NULL;
     }
@@ -326,7 +329,8 @@ int main (int argc, char **argv)
                 if (fedspace[x][y] != 0)
                     sectorlist[x]->sectorptr[y] = sectorlist[(fedspace[x][y]) - 1];
             sectorlist[x]->beacontext = "The Federation -- Do Not Dump!";
-            sectorlist[x]->nebulae = "The Federation";
+			sectorlist[x]->nebulae = malloc(15 * sizeof(char));
+			strcpy(sectorlist[x]->nebulae, "The Federation");
         }
         printf ("done.\n");
 
@@ -450,7 +454,9 @@ int main (int argc, char **argv)
             }
         }
         printf ("done.\n");
-		  fflush(stdout);
+		free(randsectornum);
+		fflush(stdout);
+
 		  if (counter == 1)
 		  {
 		  	for (x=0; x < numSectors ; x++)
@@ -493,6 +499,7 @@ int main (int argc, char **argv)
 		  fflush(stdout);
 
 	 }
+	 free(sectorlist);
 	 sectorlist = bigsectorlist;
 	 numSectors = totalsectors;
 	 for (counter=0; counter < numSectors; counter++)
@@ -529,7 +536,8 @@ int main (int argc, char **argv)
     printf ("Creating Ferringhi home sector...");
     ferringhiSector = randomnum (21, (numSectors - 1));
     sectorlist[ferringhiSector]->beacontext = "Ferringhi";
-    sectorlist[ferringhiSector]->nebulae = "Ferringhi";
+	sectorlist[ferringhiSector]->nebulae = malloc(15 * sizeof(char));
+	strcpy(sectorlist[ferringhiSector]->nebulae, "Ferringhi");
     printf ("done.\n");
 
     printf ("Creating planets...");
@@ -583,12 +591,13 @@ int main (int argc, char **argv)
     printf("Saving config data to file...");
     datenow = time(NULL);
     configdata->bangdate = (unsigned long)datenow;
-	 configdata->numnodes = numNodes;
+	configdata->numnodes = numNodes;
 
-	 char *configsave = malloc(sizeof(char)*40);
-	 strcpy(configsave, "./config.data\0");
+	char *configsave = malloc(sizeof(char)*40);
+	strcpy(configsave, "./config.data\0");
     saveconfig(configsave);
-	 free(configsave);
+	free(configsave);
+	free(configdata);
 
 
     /*  Sorts each sector's warps into numeric order */
@@ -643,6 +652,30 @@ int main (int argc, char **argv)
     /*  Writing data to ports.data file */
     printf ("Saving ports to file...");
 	saveallports("./ports.data");
+
+	for (x = 0; x < numPorts; x++)
+	{
+		if (ports[x] != NULL)
+		{
+			free(ports[x]->name);
+			free(ports[x]);
+		}
+	}
+	free(ports);
+
+	for (x = 0; x < numSectors; x++)
+	{
+		if (sectorlist[x] != NULL)
+		{
+			if (sectorlist[x]->nebulae != NULL)
+				free(sectorlist[x]->nebulae);
+			free(sectorlist[x]);
+		}
+	}
+	free(sectorlist);
+	//free(bigsectorlist);
+
+
 
  //   file = fopen ("./ports.data", "w");
  //   fileline = malloc (1024 * sizeof (char));
@@ -879,7 +912,7 @@ void makeports ()
             curport->maxproduct[2] = randomnum (2800, 3000);
         }
         else if ((loop <= numNodes+3) && numNodes > 1)
-		  {
+		{
 				if (loop == 4)
 					sprintf(name, "Terra Node");
 				else
@@ -892,9 +925,9 @@ void makeports ()
            	curport->maxproduct[0] = randomnum (2800, 3000);
            	curport->maxproduct[1] = randomnum (2800, 3000);
            	curport->maxproduct[2] = randomnum (2800, 3000);
-		  }
-		  else
-        {
+		}
+		else
+		{
             sprintf (name, "%s", tmpname);
             strcpy (curport->name, name);
             curport->maxproduct[0] = randomnum (2800, 3000);

@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include "common.h"
+#include "parse.h"
 #include "saveactions.h"
 #include "universe.h"
 
@@ -184,8 +184,6 @@ void saveship(int snumb, char *filename)
 
 void saveallports (char *filename)
 {
-    char *intptr = (char *) malloc (10);
-    char *buffer = (char *) malloc (BUFF_SIZE);
     char *stufftosave = (char *) malloc (BUFF_SIZE);
     FILE *portfile;
     int loop = 0, len;
@@ -195,7 +193,6 @@ void saveallports (char *filename)
     while (ports[portnumb - 1] != NULL)
     {
         strcpy (stufftosave, "\0");
-        sprintf (intptr, "%d", portnumb - 1);
         sprintf (stufftosave, "%d:", portnumb);
         addstring (stufftosave, ports[portnumb - 1]->name, ':', BUFF_SIZE);
         addint (stufftosave, ports[portnumb - 1]->location, ':', BUFF_SIZE);
@@ -223,8 +220,6 @@ void saveallports (char *filename)
         portnumb++;
     }
     fclose (portfile);
-    free (intptr);
-    free (buffer);
     free (stufftosave);
 
 }
