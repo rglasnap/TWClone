@@ -166,7 +166,7 @@ int main (int argc, char **argv)
     time_t datenow;
     int totalsectors = 0;
 	 int totalsectorsdone = 0;
-    int counter;
+    int counter; //TODO: Change this to something more descriptive.
 
 
     char *usageinfo =
@@ -295,6 +295,8 @@ int main (int argc, char **argv)
     	  for (x = 0; x < numSectors; x++)
 	 	  {
         	sectorlist[x] = malloc (sizeof (struct sector));
+			*sectorlist[x] = (struct sector) {};
+
 			for (y=0; y <= maxWarps; y++)
 			{
 				sectorlist[x]->sectorptr[y] = NULL;
@@ -328,7 +330,9 @@ int main (int argc, char **argv)
             for (y = 0; y < 6; y++)
                 if (fedspace[x][y] != 0)
                     sectorlist[x]->sectorptr[y] = sectorlist[(fedspace[x][y]) - 1];
-            sectorlist[x]->beacontext = "The Federation -- Do Not Dump!";
+			sectorlist[x]->beacontext = malloc(50 * sizeof(char));
+			strcpy(sectorlist[x]->beacontext, "The Federation -- Do Not Dump!");
+			
 			sectorlist[x]->nebulae = malloc(15 * sizeof(char));
 			strcpy(sectorlist[x]->nebulae, "The Federation");
         }
@@ -535,7 +539,8 @@ int main (int argc, char **argv)
 
     printf ("Creating Ferringhi home sector...");
     ferringhiSector = randomnum (21, (numSectors - 1));
-    sectorlist[ferringhiSector]->beacontext = "Ferringhi";
+	sectorlist[ferringhiSector]->beacontext = malloc(15 * sizeof(char));
+	strcpy(sectorlist[ferringhiSector]->beacontext,"Ferringhi");
 	sectorlist[ferringhiSector]->nebulae = malloc(15 * sizeof(char));
 	strcpy(sectorlist[ferringhiSector]->nebulae, "Ferringhi");
     printf ("done.\n");
@@ -631,6 +636,7 @@ int main (int argc, char **argv)
         if (sectorlist[x]->nebulae == NULL)
         {
             sectorlist[x]->nebulae = (char *)malloc(strNameLength * sizeof(char) );
+			//TODO: Create nebuale in clusters instead of at random
             consellationName (sectorlist[x]->nebulae);
         }
         if (sectorlist[x]->beacontext != NULL)
@@ -669,6 +675,8 @@ int main (int argc, char **argv)
 		{
 			if (sectorlist[x]->nebulae != NULL)
 				free(sectorlist[x]->nebulae);
+			if (sectorlist[x]->beacontext != NULL)
+				free(sectorlist[x]->beacontext);
 			free(sectorlist[x]);
 		}
 	}
@@ -883,7 +891,8 @@ void makeports ()
     for (loop = 0; loop < numPorts; loop++)
     {
         curport = (struct port *) malloc (sizeof (struct port));
-        curport->number = loop + 1;
+		*curport = (struct port) { .number = loop + 1 };
+
         randomname (tmpname);
         curport->name = (char *) malloc (sizeof (char) * 80);
         strcpy (name, "\0");
@@ -907,6 +916,7 @@ void makeports ()
         {
             strcpy (curport->name, "Stargate Alpha I");
             type = 9;
+
             curport->maxproduct[0] = randomnum (2800, 3000);
             curport->maxproduct[1] = randomnum (2800, 3000);
             curport->maxproduct[2] = randomnum (2800, 3000);
@@ -936,11 +946,12 @@ void makeports ()
             type = randomnum (1, 8);
         }
         curport->type = type;
-        curport->product[0] = 0;
-        curport->product[1] = 0;
-        curport->product[2] = 0;
+
+		//curport->product[0] = 0;
+		//curport->product[1] = 0;
+        //curport->product[2] = 0;
         curport->credits = 50000;
-        curport->invisible = 0;	/*  Only *special* ports are invisible; */
+        //curport->invisible = 0;	/*  Only *special* ports are invisible; */
 
 
         switch (type)

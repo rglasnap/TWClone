@@ -57,8 +57,15 @@ consellationName (char *name)
     }
   strcpy (nm, nameCollection[randIndex]);
   nameCount++;
-  usedNames[nameCount] = randIndex;
-  sprintf (name, "%s", nm);
+  if (nameCount < 500)
+  {
+	  usedNames[nameCount] = randIndex;
+	  sprintf(name, "%s", nm);
+  }
+  else
+  {
+	  sprintf(name, "%s", "");
+  }
   return name;
 }
 

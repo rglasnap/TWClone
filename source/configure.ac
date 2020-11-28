@@ -2,14 +2,15 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.64])
-AC_INIT([twclone], [0.1.15], [eryndil@users.sourceforge.net])
+AC_INIT([twclone], [0.1.15], [ryan.glasnapp@gmail.com])
 AC_CONFIG_SRCDIR([ansi.h])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_FILES([Makefile])
 AM_INIT_AUTOMAKE([-Wall -Werror foreign])
 
 # Checks for programs.
-AC_PROG_CC
+#AC_PROG_CC
+AC_PROG_CC_STDC
 
 # Checks for libraries.
 AC_SEARCH_LIBS([sqrt], [m])
