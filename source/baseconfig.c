@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2000 Jason C. Garcowski(jcg5@po.cwru.edu), 
+Copyright (C) 2000 Jason C. Garcowski(jcg5@po.cwru.edu),
                    Ryan Glasnapp(rglasnap@nmt.edu)
 
 This program is free software; you can redistribute it and/or
@@ -20,7 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 /*#ifdef HAVE_CONFIG_H
 #  include <autoconf.h>
-#endif /* HAVE_CONFIG_H */
+#endif HAVE_CONFIG_H */
 
 //#ifdef HAVE_ERRNO_H
 #  include <errno.h>
@@ -37,6 +37,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //#ifdef HAVE_UNISTD_H
 #  include <unistd.h>
 //#endif /* HAVE_UNISTD_H */
+
+#include <string.h>
 
 #include "baseconfig.h"
 #include "parse.h"
@@ -98,7 +100,7 @@ int init_config (char *filename)
   configdata->max_ship_name_length = popint(buffer, ":");
   configdata->ship_type_count = popint(buffer, ":");
   popstring(buffer, bangdate, ":", BUFF_SIZE);
-  configdata->bangdate = strtoul(bangdate,NULL,10); 
+  configdata->bangdate = strtoul(bangdate,NULL,10);
   configdata->numnodes = popint(buffer, ":");
 
   fclose(configfile);
@@ -111,7 +113,7 @@ int saveconfig(char *filename)
   char *buffer = (char *)malloc(sizeof(char)*BUFF_SIZE);
   char *bdate = (char *)malloc(sizeof(char)*BUFF_SIZE);
   int loop=0;
-  
+
   configfile = fopen (filename, "w");
 
   strcpy(buffer, "\0");
@@ -142,7 +144,7 @@ int saveconfig(char *filename)
 		strcat(buffer, " ");
   strcat(buffer, "\n");
 
-  fprintf(configfile, buffer);
+  fprintf(configfile, "%s", buffer);
 
   fclose(configfile);
   free(buffer);

@@ -17,6 +17,7 @@
 #include "boxmuller.h"
 #include "baseconfig.h"
 #include "planet.h"
+#include "saveactions.h"
 
 extern struct sector **sectors;
 extern struct list *symbols[HASH_LENGTH];
@@ -104,14 +105,14 @@ void processcommand (char *buffer, struct msgcommand *data)
         while (linknum < MAX_WARPS_PER_SECTOR)
         {
 				fflush(stderr);
-				
-            if (sectors[(curplayer->sector == 0) 
-							? ships[curplayer->ship - 1]->location - 1 
+
+            if (sectors[(curplayer->sector == 0)
+							? ships[curplayer->ship - 1]->location - 1
 							: (curplayer->sector - 1)]->sectorptr[linknum] == NULL)
                 break;
             else
-                if (sectors[(curplayer->sector == 0) 
-							? ships[curplayer->ship - 1]->location - 1 
+                if (sectors[(curplayer->sector == 0)
+							? ships[curplayer->ship - 1]->location - 1
 							: (curplayer->sector - 1)]->sectorptr[linknum++]->number ==
                         data->to)
                 {
@@ -135,7 +136,7 @@ void processcommand (char *buffer, struct msgcommand *data)
                     //Put realtime so and so warps in/out of the sector here.
                     /*gettimeofday( &end, 0);
                        seconds = end.tv_sec - begin.tv_sec;
-                       while(seconds != 
+                       while(seconds !=
                        (shiptypes[ships[curplayer->ship - 1]->type - 1].turns))
                        {
                        gettimeofday(&end, 0);
@@ -153,8 +154,8 @@ void processcommand (char *buffer, struct msgcommand *data)
 
                 }
         }
-        findautoroute ((curplayer->sector == 0) 
-						? ships[curplayer->ship - 1]->location 
+        findautoroute ((curplayer->sector == 0)
+						? ships[curplayer->ship - 1]->location
 						: (curplayer->sector), data->to, buffer);
         break;
     case ct_login:
@@ -174,11 +175,11 @@ void processcommand (char *buffer, struct msgcommand *data)
 		  strcpy(curplayer->ipaddr, data->ipaddr);
 		  if ((ships[curplayer->ship - 1]->flags & S_CITADEL) == S_CITADEL)
 		  {
-				ships[curplayer->ship - 1]->flags = 
+				ships[curplayer->ship - 1]->flags =
 					ships[curplayer->ship - 1]->flags & (S_MAX ^ S_CITADEL);
 				if ((ships[curplayer->ship - 1]->flags & S_PLANET) != S_PLANET)
 				{
-					ships[curplayer->ship - 1]->flags = 
+					ships[curplayer->ship - 1]->flags =
 						ships[curplayer->ship - 1]->flags & (S_MAX ^ S_PLANET);
 					ships[curplayer->ship - 1]->onplanet = 0;
                insertitem(curplayer, player,
@@ -410,7 +411,7 @@ void processcommand (char *buffer, struct msgcommand *data)
 				GAMEON = 0;
 		  }
 		  else
-		  {	
+		  {
 				strcpy(buffer, "BAD: You do not have valid permissions to do that!\n");
 		  }
         break;
@@ -455,7 +456,7 @@ void processcommand (char *buffer, struct msgcommand *data)
             }
             else
             {
-               delete (curplayer->name, player, 
+               delete (curplayer->name, player,
 							sectors[curplayer->sector - 1]->playerlist, 1);
             }
 				strcpy(buffer, "OK: Landing on planet!");
@@ -540,10 +541,10 @@ void processcommand (char *buffer, struct msgcommand *data)
 					strcpy(buffer, "BAD: You need a citadel to do that!");
 					break;
 				}
-				if ((ships[curplayer->ship - 1]->flags & S_CITADEL) 
+				if ((ships[curplayer->ship - 1]->flags & S_CITADEL)
 						  != S_CITADEL)
 				{
-					ships[curplayer->ship - 1]->flags = 
+					ships[curplayer->ship - 1]->flags =
 						(ships[curplayer->ship - 1]->flags | S_CITADEL);
 				}
 				strcpy(buffer, "OK: Entering Citadel!");
@@ -558,7 +559,7 @@ void processcommand (char *buffer, struct msgcommand *data)
 					strcpy(buffer, "BAD: You need a citadel to do that!");
 					break;
 				}
-				else if ((ships[curplayer->ship - 1]->flags & S_CITADEL) 
+				else if ((ships[curplayer->ship - 1]->flags & S_CITADEL)
 						  != S_CITADEL)
 				{
 					strcpy(buffer, "BAD: You have to be in a citadel to do that!");
@@ -580,7 +581,7 @@ void processcommand (char *buffer, struct msgcommand *data)
 					strcpy(buffer, "BAD: You need a better citadel to do that!");
 					break;
 				}
-				else if ((ships[curplayer->ship - 1]->flags & S_CITADEL) 
+				else if ((ships[curplayer->ship - 1]->flags & S_CITADEL)
 						  != S_CITADEL)
 				{
 					strcpy(buffer, "BAD: You have to be in a citadel to do that!");
@@ -593,7 +594,7 @@ void processcommand (char *buffer, struct msgcommand *data)
 					strcpy(buffer, "BAD: You need a better citadel to do that!");
 					break;
 				}
-				else if ((ships[curplayer->ship - 1]->flags & S_CITADEL) 
+				else if ((ships[curplayer->ship - 1]->flags & S_CITADEL)
 						  != S_CITADEL)
 				{
 					strcpy(buffer, "BAD: You have to be in a citadel to do that!");
@@ -605,7 +606,7 @@ void processcommand (char *buffer, struct msgcommand *data)
 					strcpy(buffer, "BAD: You need a citadel to do that!");
 					break;
 				}
-				else if ((ships[curplayer->ship - 1]->flags & S_CITADEL) 
+				else if ((ships[curplayer->ship - 1]->flags & S_CITADEL)
 						  != S_CITADEL)
 				{
 					strcpy(buffer, "BAD: You have to be in a citadel to do that!");
@@ -617,7 +618,7 @@ void processcommand (char *buffer, struct msgcommand *data)
 					strcpy(buffer, "BAD: You need a citadel to do that!");
 					break;
 				}
-				else if ((ships[curplayer->ship - 1]->flags & S_CITADEL) 
+				else if ((ships[curplayer->ship - 1]->flags & S_CITADEL)
 						  != S_CITADEL)
 				{
 					strcpy(buffer, "BAD: You have to be in a citadel to do that!");
@@ -626,7 +627,7 @@ void processcommand (char *buffer, struct msgcommand *data)
 			case pl_cquit:
 				if ((ships[curplayer->ship - 1]->flags & S_CITADEL) == S_CITADEL)
 				{
-					ships[curplayer->ship - 1]->flags = 
+					ships[curplayer->ship - 1]->flags =
 						ships[curplayer->ship - 1]->flags & (S_MAX ^ S_CITADEL);
 					strcpy(buffer, "OK: Leaving Citadel");
 				}
@@ -634,10 +635,10 @@ void processcommand (char *buffer, struct msgcommand *data)
 			case pl_quit:
 				if ((ships[curplayer->ship - 1]->flags & S_PLANET) == S_PLANET)
 				{
-					ships[curplayer->ship - 1]->flags = 
+					ships[curplayer->ship - 1]->flags =
 						ships[curplayer->ship - 1]->flags & (S_MAX ^ S_PLANET);
 					strcpy(buffer, "OK: Leaving Planet!");
-					sendtosector(cursector->number, curplayer->number, -5, 
+					sendtosector(cursector->number, curplayer->number, -5,
 							ships[curplayer->ship - 1]->onplanet);
 					ships[curplayer->ship - 1]->onplanet = 0;
 					insertitem(curplayer, player, cursector->playerlist,1);
@@ -737,14 +738,14 @@ void processcommand (char *buffer, struct msgcommand *data)
             strcpy (buffer, data->buffer);
             /*if (curplayer->ported == 0)
                {
-               curplayer = delete(curplayer->name, player, 
+               curplayer = delete(curplayer->name, player,
                sectors[curport->location - 1]->playerlist, 1);
                curplayer->ported = 1;
                } */
-				if (((ships[curplayer->ship - 1]->flags & S_PORTED) != S_PORTED) 
+				if (((ships[curplayer->ship - 1]->flags & S_PORTED) != S_PORTED)
 									 && (data->pcommand != p_land))
 				{
-					  ships[curplayer->ship - 1]->flags = 
+					  ships[curplayer->ship - 1]->flags =
 								 ships[curplayer->ship - 1]->flags | S_PORTED;
 					  if (curplayer->sector == 0)
         			  {
@@ -776,7 +777,7 @@ void processcommand (char *buffer, struct msgcommand *data)
             case p_land:
 					 if (curport->type == 9)
 					 {
-						if ((ships[curplayer->ship - 1]->flags & S_STARDOCK) 
+						if ((ships[curplayer->ship - 1]->flags & S_STARDOCK)
 											 != S_STARDOCK)
 						{
 							if (curplayer->sector == 0)
@@ -799,7 +800,7 @@ void processcommand (char *buffer, struct msgcommand *data)
 					 }
 					 else if (curport->type == 10)
 					 {
-						if ((ships[curplayer->ship - 1]->flags & S_NODE) 
+						if ((ships[curplayer->ship - 1]->flags & S_NODE)
 											 != S_NODE)
 						{
 							if (curplayer->sector == 0)
@@ -850,7 +851,7 @@ void processcommand (char *buffer, struct msgcommand *data)
 					 strcpy(buffer, "BAD: Not at a port!");
 					 if ((ships[curplayer->ship -1]->flags & S_PORTED) == S_PORTED)
 					 {
-						ships[curplayer->ship - 1]->flags = 
+						ships[curplayer->ship - 1]->flags =
 								 ships[curplayer->ship - 1]->flags & (S_MAX ^ S_PORTED);
 					 	strcpy(buffer, "OK: Leaving port");
 						if (curplayer->sector == 0)
@@ -903,7 +904,7 @@ void processcommand (char *buffer, struct msgcommand *data)
             			sendtosector (curplayer->sector, curplayer->number, -3,0);
         			 		}
 					 	}
-					 ships[curplayer->ship - 1]->flags = 
+					 ships[curplayer->ship - 1]->flags =
 								 ships[curplayer->ship - 1]->flags & (S_MAX ^ S_PORTED);
 					 strcpy(buffer, "OK: Leaving port");
 					 }
@@ -1113,7 +1114,7 @@ void processcommand (char *buffer, struct msgcommand *data)
         }
 		  strcpy(buffer, data->buffer);
 		  //Check other flags here
-		  parse_attack(buffer, curplayer); 
+		  parse_attack(buffer, curplayer);
         break;
     default:
         //fprintf(stderr, "processcommand: Got a bogus command\n");
@@ -1225,7 +1226,7 @@ void builddescription (int sector, char *buffer, int playernum)
     }
 	 addstring(buffer, "", ':', BUFF_SIZE);  //armid mines
 	 addstring(buffer, "", ':', BUFF_SIZE);  //armid mines owner
-	 addstring(buffer, "", ':', BUFF_SIZE);  //limpid mines 
+	 addstring(buffer, "", ':', BUFF_SIZE);  //limpid mines
 	 addstring(buffer, "", ':', BUFF_SIZE);  //limpid mines owner
 	 //Now for empty ships!
 	 p = 0;
@@ -1261,7 +1262,7 @@ void builddescription (int sector, char *buffer, int playernum)
       		while (element != NULL)
       		{
     			p = ((struct planet *)element->item)->num;
-    			fprintf(stderr, "\nbuilddescription: Sector %d found planet %d", sector, p); 
+    			fprintf(stderr, "\nbuilddescription: Sector %d found planet %d", sector, p);
     			if (p != 0)
     				addint(buffer, p, ',', BUFF_SIZE);
     			element = element->listptr;
@@ -1500,224 +1501,6 @@ void findautoroute (int from, int to, char *buffer)
   end of the autopilot stuff (but probably not the end of junk ;)
 */
 
-void saveplayer (int pnumb, char *filename)
-{
-    char *intptr = (char *) malloc (50);
-    char *buffer = (char *) malloc (BUFF_SIZE);
-    char *stufftosave = (char *) malloc (BUFF_SIZE);
-    FILE *playerfile;
-    int loop = 0, len = 0;
-
-    strcpy (buffer, "\0");
-    strcpy (intptr, "\0");
-    strcpy (stufftosave, "\0");
-
-    //sprintf (intptr, "%d:", pnumb - 1);
-    sprintf (stufftosave, "%d:", pnumb);
-	 if (players[pnumb -1] == NULL)
-	 {
-		strcat(stufftosave, "(Null):(Null):0:0:0:0:0:0:0:0:0:0:");
-	 }
-	 else
-	 {
-    addstring (stufftosave, players[pnumb - 1]->name, ':', BUFF_SIZE);
-    addstring (stufftosave, players[pnumb - 1]->passwd, ':', BUFF_SIZE);
-    addint (stufftosave, players[pnumb - 1]->sector, ':', BUFF_SIZE);
-    addint (stufftosave, players[pnumb - 1]->ship, ':', BUFF_SIZE);
-    addint (stufftosave, players[pnumb - 1]->experience, ':', BUFF_SIZE);
-    addint (stufftosave, players[pnumb - 1]->alignment, ':', BUFF_SIZE);
-    addint (stufftosave, players[pnumb - 1]->turns, ':', BUFF_SIZE);
-    //addint (stufftosave, players[pnumb - 1]->credits, ':', BUFF_SIZE);
-	 sprintf(intptr, "%ld", players[pnumb - 1]->credits, ':', BUFF_SIZE);
-	 addstring(stufftosave, intptr, ':', BUFF_SIZE);
-	 //addint(stufftosave, players[pnumb - 1]->bank_balance, ':', BUFF_SIZE);
-	 sprintf(intptr, "%ld", players[pnumb - 1]->bank_balance, ':', BUFF_SIZE);
-	 addstring(stufftosave, intptr, ':', BUFF_SIZE);
-	 addint(stufftosave, players[pnumb - 1]->flags, ':', BUFF_SIZE);
-	 addint(stufftosave, players[pnumb - 1]->sysop, ':', BUFF_SIZE);
-	 }
-	 //Now to use intptr to find where to place the person.
-	 sprintf(intptr, "%d:", pnumb - 1);
-    len = strlen (stufftosave);
-	 //fprintf(stderr, "saveplayer: Player save string is (%s)", stufftosave);
-
-    for (loop = 1; loop <= 199 - len; loop++)
-        strcat (stufftosave, " ");
-    strcat (stufftosave, "\n");
-
-
-    playerfile = fopen (filename, "r+");
-    if (playerfile == NULL)
-    {
-        fprintf (stderr, "\nsaveplayer: No playerfile! Saving to new one!");
-        if ((pnumb - 1) != 0)
-        {
-            fprintf (stderr,
-                     "\nsaveplayer: Player is not player 1 for new save file!");
-            free (intptr);
-            free (buffer);
-            free (stufftosave);
-            return;
-        }
-        playerfile = fopen (filename, "w");
-        fprintf (playerfile, "%s", stufftosave);
-        fclose (playerfile);
-        free (intptr);
-        free (buffer);
-        free (stufftosave);
-        return;
-    }
-    if (pnumb == 1)
-    {
-        fprintf (playerfile, "%s", stufftosave);
-        fclose (playerfile);
-        free (intptr);
-        free (buffer);
-        free (stufftosave);
-        return;
-    }
-    while (strncmp (buffer, intptr, strlen (intptr)) != 0)
-    {
-        strcpy (buffer, "\0");
-        fgets (buffer, BUFF_SIZE, playerfile);
-        if (strlen (buffer) == 0)
-            return;
-    }
-    fprintf (playerfile, "%s", stufftosave);
-    fflush (playerfile);
-    fclose (playerfile);
-    free (intptr);
-    free (buffer);
-    free (stufftosave);
-}
-
-void saveship (int snumb, char *filename)
-{
-    char *intptr = (char *) malloc (10*sizeof(char));
-    char *buffer = (char *) malloc (BUFF_SIZE*sizeof(char));
-    char *stufftosave = (char *) malloc (BUFF_SIZE*sizeof(char));
-    FILE *playerfile;
-    int loop = 0, len;
-
-    strcpy (buffer, "\0");
-    strcpy (intptr, "\0");
-    strcpy (stufftosave, "\0");
-
-    sprintf (intptr, "%d:", snumb - 1);
-    sprintf (stufftosave, "%d:", snumb);
-	 if (ships[snumb -1] == NULL)
-	 {
-		strcat(stufftosave, "(Null):0:0:0:0:0:0:0:0:0:0:0:");
-	 }
-	 else
-	 {
-    addstring (stufftosave, ships[snumb - 1]->name, ':', BUFF_SIZE);
-    addint (stufftosave, ships[snumb - 1]->type, ':', BUFF_SIZE);
-    addint (stufftosave, ships[snumb - 1]->location, ':', BUFF_SIZE);
-    addint (stufftosave, ships[snumb - 1]->fighters, ':', BUFF_SIZE);
-    addint (stufftosave, ships[snumb - 1]->shields, ':', BUFF_SIZE);
-    addint (stufftosave, ships[snumb - 1]->holds, ':', BUFF_SIZE);
-    addint (stufftosave, ships[snumb - 1]->colonists, ':', BUFF_SIZE);
-    addint (stufftosave, ships[snumb - 1]->equipment, ':', BUFF_SIZE);
-    addint (stufftosave, ships[snumb - 1]->organics, ':', BUFF_SIZE);
-    addint (stufftosave, ships[snumb - 1]->ore, ':', BUFF_SIZE);
-    addint (stufftosave, ships[snumb - 1]->owner, ':', BUFF_SIZE);
-	 addint(stufftosave, ships[snumb - 1]->flags, ':', BUFF_SIZE);
-	 addint(stufftosave, ships[snumb - 1]->onplanet, ':', BUFF_SIZE);
-	 }
-    len = strlen (stufftosave);
-    for (loop = 1; loop <= 199 - len; loop++)	//This puts a buffer of space in the save
-        strcat (stufftosave, " ");	//file so things don't get overwritten
-    strcat (stufftosave, "\n");	//when saving.
-
-    playerfile = fopen (filename, "r+");
-    if (playerfile == NULL)
-    {
-        fprintf (stderr, "\nsaveship: No ship file! Saving to new one!");
-        if ((snumb - 1) != 0)
-        {
-            fprintf (stderr, "\nsaveship: Ship is not #1 for new save file!");
-            exit (-1);
-        }
-        playerfile = fopen (filename, "w");
-        fprintf (playerfile, "%s", stufftosave);
-        fclose (playerfile);
-        free (intptr);
-        free (buffer);
-        free (stufftosave);
-        return;
-    }
-    if (snumb == 1)
-    {
-        fprintf (playerfile, "%s", stufftosave);
-        fclose (playerfile);
-        free (intptr);
-        free (buffer);
-        free (stufftosave);
-        return;
-    }
-    while (strncmp (buffer, intptr, strlen (intptr)) != 0)
-    {
-        strcpy (buffer, "\0");
-        fgets (buffer, BUFF_SIZE, playerfile);
-        if (strlen (buffer) == 0)
-            return;
-    }
-    fprintf (playerfile, "%s", stufftosave);
-    fclose (playerfile);
-    free (intptr);
-    free (buffer);
-    free (stufftosave);
-
-}
-
-void saveallports (char *filename)
-{
-    char *intptr = (char *) malloc (10);
-    char *buffer = (char *) malloc (BUFF_SIZE);
-    char *stufftosave = (char *) malloc (BUFF_SIZE);
-    FILE *portfile;
-    int loop = 0, len;
-    int portnumb = 1;
-
-    portfile = fopen (filename, "w");
-    while (ports[portnumb - 1] != NULL)
-    {
-        strcpy (stufftosave, "\0");
-        sprintf (intptr, "%d", portnumb - 1);
-        sprintf (stufftosave, "%d:", portnumb);
-        addstring (stufftosave, ports[portnumb - 1]->name, ':', BUFF_SIZE);
-        addint (stufftosave, ports[portnumb - 1]->location, ':', BUFF_SIZE);
-        addint (stufftosave, ports[portnumb - 1]->maxproduct[0], ':',
-                BUFF_SIZE);
-        addint (stufftosave, ports[portnumb - 1]->maxproduct[1], ':',
-                BUFF_SIZE);
-        addint (stufftosave, ports[portnumb - 1]->maxproduct[2], ':',
-                BUFF_SIZE);
-        addint (stufftosave, ports[portnumb - 1]->product[0], ':', BUFF_SIZE);
-        addint (stufftosave, ports[portnumb - 1]->product[1], ':', BUFF_SIZE);
-        addint (stufftosave, ports[portnumb - 1]->product[2], ':', BUFF_SIZE);
-        addint (stufftosave, ports[portnumb - 1]->credits, ':', BUFF_SIZE);
-        addint (stufftosave, ports[portnumb - 1]->type, ':', BUFF_SIZE);
-        addint (stufftosave, ports[portnumb - 1]->invisible, ':', BUFF_SIZE);
-
-        len = strlen (stufftosave);
-        for (loop = 1; loop <= 199 - len; loop++)	//This puts a buffer of space in the save
-            strcat (stufftosave, " ");	//file so things don't get overwritten
-        strcat (stufftosave, "\n");	//when saving.
-        //fprintf(stderr, "\nsaveallports: Saving port '%s'", stufftosave);
-        //fflush(stderr);
-
-        fprintf (portfile, "%s", stufftosave);
-        portnumb++;
-    }
-    fclose (portfile);
-    free (intptr);
-    free (buffer);
-    free (stufftosave);
-
-}
-
 void planettake(char *buffer, struct player *curplayer)
 {
 	struct planet *curplanet;
@@ -1730,7 +1513,7 @@ void planettake(char *buffer, struct player *curplayer)
 	amt = popint(buffer, ":");
 	curship = ships[curplayer->ship - 1];
 	curplanet = planets[curship->onplanet - 1];
-	emptyholds = curship->holds - curship->ore -curship->organics 
+	emptyholds = curship->holds - curship->ore -curship->organics
 			  -curship->equipment - curship->colonists;
 	if (emptyholds < 0)
 	{
@@ -1743,7 +1526,7 @@ void planettake(char *buffer, struct player *curplayer)
 	{
 		strcpy(buffer, "BAD: You don't have any empty holds!");
 		return;
-	}	
+	}
 	//For choices
 	//0 ore, 1 org, 2 equip, 3 col in ore, 4 col in org, 5 col in equip
 	//6 figs, 7 creds, 8 shields
@@ -1873,13 +1656,13 @@ void planettake(char *buffer, struct player *curplayer)
 				strcpy(buffer, "BAD: The shields don't have that much!");
 				return;
 			}
-			if (amt*10 > 
+			if (amt*10 >
 				(shiptypes[curship->type -1]->maxshields - curship->shields))
 			{
 				strcpy(buffer, "BAD: Your ship can't carry that many!");
 				return;
 			}
-			curplanet->citdl->planetaryShields = 
+			curplanet->citdl->planetaryShields =
 					curplanet->citdl->planetaryShields - amt;
 			curship->shields = curship->shields + 10*amt;
 			break;
@@ -1902,7 +1685,7 @@ void planetleave(char *buffer, struct player *curplayer)
 	amt = popint(buffer, ":");
 	curship = ships[curplayer->ship - 1];
 	curplanet = planets[curship->onplanet - 1];
-	emptyholds = curship->holds - curship->ore -curship->organics 
+	emptyholds = curship->holds - curship->ore -curship->organics
 			  -curship->equipment - curship->colonists;
 	if (emptyholds < 0)
 	{
@@ -1964,7 +1747,7 @@ void planetleave(char *buffer, struct player *curplayer)
 				strcpy(buffer, "BAD: You don't have that many colonists");
 				return;
 			}
-			if ((amt + curplanet->fuelColonist) > 
+			if ((amt + curplanet->fuelColonist) >
 								 curplanet->pClass->maxColonist[0])
 			{
 				strcpy(buffer, "BAD: Planet can't hold that many ore colonists!");
@@ -1979,7 +1762,7 @@ void planetleave(char *buffer, struct player *curplayer)
 				strcpy(buffer, "BAD: You don't have that many colonists");
 				return;
 			}
-			if ((amt + curplanet->organicsColonist) > 
+			if ((amt + curplanet->organicsColonist) >
 								 curplanet->pClass->maxColonist[1])
 			{
 				strcpy(buffer, "BAD: Planet can't hold that many organics colonists!");
@@ -1994,7 +1777,7 @@ void planetleave(char *buffer, struct player *curplayer)
 				strcpy(buffer, "BAD: You don't have that many colonists");
 				return;
 			}
-			if ((amt + curplanet->equipmentColonist) > 
+			if ((amt + curplanet->equipmentColonist) >
 								 curplanet->pClass->maxColonist[2])
 			{
 				strcpy(buffer, "BAD: Planet can't hold that many equipment colonists!");
@@ -2044,7 +1827,7 @@ void planetleave(char *buffer, struct player *curplayer)
 				strcpy(buffer, "BAD: Your ship doesn't have that many shields!");
 				return;
 			}
-			curplanet->citdl->planetaryShields = 
+			curplanet->citdl->planetaryShields =
 					  curplanet->citdl->planetaryShields + amt;
 			curship->shields = curship->shields - 10*amt;
 			break;
@@ -2078,37 +1861,37 @@ void planetupgrade(char *buffer, struct planet *curplanet)
 	addint(buffer, curplanet->pClass->citadelUpgradeTime[curplanet->citdl->level], ':', BUFF_SIZE);
 	if ((upgrade == 1) && (curplanet->citdl->upgradestart == 0))
 	{
-		if ((curplanet->fuelColonist + curplanet->organicsColonist + 
-			curplanet->equipmentColonist) < 
+		if ((curplanet->fuelColonist + curplanet->organicsColonist +
+			curplanet->equipmentColonist) <
 			curplanet->pClass->citadelUpgradeColonist[curplanet->citdl->level]/1000)
 		{
 			strcpy(buffer, "BAD: Not enough Colonists");
 			return;
 		}
-		if (curplanet->fuel < 
+		if (curplanet->fuel <
 			curplanet->pClass->citadelUpgradeOre[curplanet->citdl->level])
 		{
 			strcpy(buffer, "BAD: Not enough Ore");
 			return;
 		}
-		if (curplanet->organics < 
+		if (curplanet->organics <
 			curplanet->pClass->citadelUpgradeOrganics[curplanet->citdl->level])
 		{
 			strcpy(buffer, "BAD: Not enough Organics");
 			return;
 		}
-		if (curplanet->equipment < 
+		if (curplanet->equipment <
 			curplanet->pClass->citadelUpgradeEquipment[curplanet->citdl->level])
 		{
 			strcpy(buffer, "BAD: Not enough Equipment");
 			return;
 		}
 		curplanet->citdl->upgradestart = timenow;
-		curplanet->fuel = curplanet->fuel - 
+		curplanet->fuel = curplanet->fuel -
 			curplanet->pClass->citadelUpgradeOre[curplanet->citdl->level];
-		curplanet->organics = curplanet->organics - 
+		curplanet->organics = curplanet->organics -
 			curplanet->pClass->citadelUpgradeOrganics[curplanet->citdl->level];
-		curplanet->equipment = curplanet->equipment - 
+		curplanet->equipment = curplanet->equipment -
 			curplanet->pClass->citadelUpgradeEquipment[curplanet->citdl->level];
 		strcpy(buffer, "OK: Staring Citadel upgrade!");
 	}
@@ -2136,12 +1919,12 @@ void totalplanetinfo(int pnumb, char *buffer)
 	addint(buffer, planets[pnumb - 1]->organics, ':', BUFF_SIZE);
 	addint(buffer, planets[pnumb - 1]->equipment, ':', BUFF_SIZE);
 	addint(buffer, planets[pnumb - 1]->fighters, ':', BUFF_SIZE);
-	addint(buffer, planets[pnumb - 1]->pClass->fuelProduction, ':', BUFF_SIZE); 
-	addint(buffer, planets[pnumb - 1]->pClass->organicsProduction, ':', BUFF_SIZE); 
+	addint(buffer, planets[pnumb - 1]->pClass->fuelProduction, ':', BUFF_SIZE);
+	addint(buffer, planets[pnumb - 1]->pClass->organicsProduction, ':', BUFF_SIZE);
 	addint(buffer, planets[pnumb - 1]->pClass->equipmentProduction, ':', BUFF_SIZE);
-	addint(buffer, planets[pnumb - 1]->pClass->fighterProduction, ':', BUFF_SIZE); 
-	addint(buffer, planets[pnumb - 1]->pClass->maxore, ':', BUFF_SIZE); 
-	addint(buffer, planets[pnumb - 1]->pClass->maxorganics, ':', BUFF_SIZE); 
+	addint(buffer, planets[pnumb - 1]->pClass->fighterProduction, ':', BUFF_SIZE);
+	addint(buffer, planets[pnumb - 1]->pClass->maxore, ':', BUFF_SIZE);
+	addint(buffer, planets[pnumb - 1]->pClass->maxorganics, ':', BUFF_SIZE);
 	addint(buffer, planets[pnumb - 1]->pClass->maxequipment, ':', BUFF_SIZE);
 	addint(buffer, planets[pnumb - 1]->pClass->maxfighters, ':', BUFF_SIZE);
 	addint(buffer, planets[pnumb - 1]->citdl->level, ':', BUFF_SIZE);
@@ -2231,7 +2014,7 @@ void listplayerships(char *buffer, struct player *curplayer)
 {
    int loop=0;
    strcpy(buffer, ":\0");
-   
+
    while (ships[loop] != NULL && loop < configdata->max_ships)
    {
 	if (ships[loop]->owner == curplayer->number)   //Or corp
@@ -2292,7 +2075,7 @@ void buildgameinfo(char *buffer)
   }
   datenow = time(NULL);
   difference = (datenow - configdata->bangdate)/(24*3600);
-  
+
   buffer[0] = '\0';
   addint(buffer, sectorcount, ':', BUFF_SIZE);
   addint(buffer, configdata->turnsperday, ':', BUFF_SIZE);
@@ -2330,7 +2113,7 @@ void buildtotalinfo (int pnumb, char *buffer, struct msgcommand *data)
     addint (buffer, players[pnumb - 1]->alignment, ':', BUFF_SIZE);
     addint (buffer, players[pnumb - 1]->turns, ':', BUFF_SIZE);
     //addint (buffer, players[pnumb - 1]->credits, ':', BUFF_SIZE);
-	 sprintf(tempbuff, "%ld\0", players[pnumb - 1]->credits);
+	 sprintf(tempbuff, "%ld", players[pnumb - 1]->credits);
 	 addstring(buffer, tempbuff, ':', BUFF_SIZE);
     addint (buffer, ships[players[pnumb - 1]->ship - 1]->number, ':',
             BUFF_SIZE);
@@ -2391,7 +2174,7 @@ void sellship(char *buffer, struct player *curplayer, int port_location)
 	struct ship *curship;
 	const float multiplier = 0.75;
 	int total = 0;
-	
+
 	shipnum = popint(buffer, ":");
 	curship = ships[shipnum - 1];
 	curplayer->sector = port_location;
@@ -2423,11 +2206,11 @@ void priceship(char *buffer, int shipnum)
 	struct ship *curship;
 	const float multiplier = 0.75;
 	int total = 0;
-	
+
 	curship = ships[shipnum - 1];
 	holds_to_sell = curship->holds - shiptypes[curship->type - 1]->initialholds;
 	//Taken from do_ship_upgrade
-	price_holds = base_hold_price*holds_to_sell + 
+	price_holds = base_hold_price*holds_to_sell +
 		hold_increment*holds_to_sell*shiptypes[curship->type -1]->initialholds;
 
 	total = total + multiplier*(float)shiptypes[curship->type -1]->basecost;
@@ -2455,7 +2238,7 @@ void priceship(char *buffer, int shipnum)
 		total = total + multiplier*(float)(price_per_shield*curship->shields);
 	}
 	//Add hardware in here!
-	
+
 	strcpy(buffer, ":");
 	addint(buffer, total, ':', BUFF_SIZE);
 	strcat(buffer, temp);
@@ -2502,7 +2285,7 @@ void buyship(char *buffer, struct player *curplayer)
 		strcpy(buffer, "BAD: Another ship has this name already!");
 		return;
 	}
-	if ((curship = 
+	if ((curship =
 			(struct ship *)insert(name, ship, symbols, HASH_LENGTH)) == NULL)
 	{
 		//This should never be reached because of the previous if.
@@ -2583,8 +2366,8 @@ void do_ship_upgrade(struct player *curplayer, char *buffer, struct ship *curshi
 	int buying=0;
 	int total_price=0;
 	int total_holds = 0;  //This is the total number of holds they are going
-	//to have when finished purchasing. 
-	int price_holds = 0;  //Since the price for holds is complicated 
+	//to have when finished purchasing.
+	int price_holds = 0;  //Since the price for holds is complicated
 	//This is the price of the holds the player is buying
 
 	if (sectors[curship->location - 1]->portptr == NULL)
@@ -2676,7 +2459,7 @@ void do_ship_upgrade(struct player *curplayer, char *buffer, struct ship *curshi
 	{
 		total_price = price_per_shield*shields + price_per_fighter*fighters
 				  + price_holds;
-				  
+
 		if (total_price > curplayer->credits)
 		{
 			strcpy(buffer, "BAD: Not enough credits");
@@ -2719,10 +2502,10 @@ void trading (struct player *curplayer, struct port *curport, char *buffer,
      * Using the Box-Muller Polar Method for Standard Normal Variables
      * The function box_muller() was obtained from
      * http://www.taygeta.com/pub/c/boxmuller.c
-     * on 3/10/2001 
+     * on 3/10/2001
      * because log() has problems evaluating numbers close to zero.
-     * 
-     * 
+     *
+     *
      */
     int offered = 0;
     int playerprice = 0;
@@ -2873,7 +2656,7 @@ void trading (struct player *curplayer, struct port *curport, char *buffer,
 							accepted = -1;
 							xpgained = 0;
 					 }
-					 if ((offered >= playerprice) && offered!=0 
+					 if ((offered >= playerprice) && offered!=0
 								&& playerprice < 3*firstprice)
                 {
                     accepted = 1;
@@ -2883,7 +2666,7 @@ void trading (struct player *curplayer, struct port *curport, char *buffer,
             }
             else if (portconversion[curport->type][product] == 'S')
             {
-                fprintf (stderr, "Offered price is %d, They have %d\n",
+                fprintf (stderr, "Offered price is %d, They have %ld\n",
                          playerprice, curplayer->credits);
                 if (playerprice > curplayer->credits)	//In case someones trying to
                 {		//out fox the system
@@ -3026,7 +2809,7 @@ void buildnewplanet (struct player *curplayer, char *buffer, int sector)
     char p_ownertype = 'p', dummy;
 	 char *planetname = (char *)malloc(sizeof(char)*(MAX_NAME_LENGTH+1));
 	 int input;
-	 
+
     p_name = (char *) malloc (sizeof (char) * (MAX_NAME_LENGTH + 1));
 	 popstring(buffer, planetname, ":", BUFF_SIZE);
 	 input = popint(buffer, ":");
@@ -3050,7 +2833,7 @@ void buildnewplanet (struct player *curplayer, char *buffer, int sector)
 			return;
 		}
 	 }
-	 
+
     for (i = 0; i <= configdata->max_total_planets; i++)
     {
         if (planets[i] == NULL)
@@ -3069,7 +2852,7 @@ void buildnewplanet (struct player *curplayer, char *buffer, int sector)
     strcpy(planets[p_num-1]->name, planetname);
     planets[p_num-1]->owner = curplayer->number;
 	 planets[p_num-1]->sector = sector;
-	 planets[p_num-1]->creator = 
+	 planets[p_num-1]->creator =
 			(char *)malloc(sizeof(char)*(MAX_NAME_LENGTH+1));
 	 strcpy(planets[p_num-1]->creator, curplayer->name);
     planets[p_num-1]->type = p_type;
@@ -3101,7 +2884,7 @@ void buildnewplanet (struct player *curplayer, char *buffer, int sector)
     //curplayer->sector = sector; //For some reason this causes problems
 	 //Put int ships[curplayer->ship - 1]->location = sector;
 	 //ships[curplayer->ship - 1]->location = sector;
-    insert_planet (planets[p_num-1], 
+    insert_planet (planets[p_num-1],
 		sectors[ships[curplayer->ship - 1]->location - 1], curplayer->number);
 }
 
@@ -3180,36 +2963,36 @@ int move_player (struct player *p, struct msgcommand *data, char *buffer)
     fprintf (stderr, "processcommand: Got a Move command\n");
 
     //I'm assuming that this will short circuit
-    if (((p = (struct player *) find (data->name, player, symbols, 
+    if (((p = (struct player *) find (data->name, player, symbols,
 								HASH_LENGTH)) == NULL)
             || ((p->sector != 0) ? p->sector : (ships[p->ship - 1]->location) ==
                 data->to) || data->to > sectorcount)
         return -1;
-    if ((p->turns <= 0) || 
+    if ((p->turns <= 0) ||
 		 (p->turns < shiptypes[ships[p->ship - 1]->type - 1]->turns))
         return -1;
 
     while (linknum < MAX_WARPS_PER_SECTOR)
     {
-        if (sectors[(p->sector == 0) 
-					? ships[p->ship - 1]->location - 1 : 
+        if (sectors[(p->sector == 0)
+					? ships[p->ship - 1]->location - 1 :
 					(p->sector - 1)]->sectorptr[linknum] == NULL)
             break;
         else
-            if (sectors[(p->sector == 0) 
-					? ships[p->ship - 1]->location - 1 : 
+            if (sectors[(p->sector == 0)
+					? ships[p->ship - 1]->location - 1 :
 					(p->sector - 1)]->sectorptr[linknum++]->number == data->to)
             {
                 fprintf (stderr, "processcommand: Move was successfull\n");
                 if (p->sector == 0)
                 {
-                    p = delete (p->name, player, 
+                    p = delete (p->name, player,
 							sectors[ships[p->ship - 1]->location - 1]->playerlist,1);
                     ships[p->ship - 1]->location = data->to;
                 }
                 else
                 {
-                    p = delete (p->name, player, 
+                    p = delete (p->name, player,
 								sectors[p->sector - 1]->playerlist, 1);
                     p->sector = data->to;
                 }
@@ -3362,7 +3145,7 @@ void listnodes(char *buffer, struct port *curport)
 {
 	int curnode;
 	int counter;
-	
+
 	for (counter=0; counter < configdata->numnodes; counter++)
 	{
 		if (nodes[counter]->portptr != curport)
@@ -3392,7 +3175,7 @@ void nodetravel(char *buffer, struct player *curplayer)
 	if (curplayer->sector == 0)
 	{
 		ships[curplayer->ship - 1]->location = nodes[nodeto-1]->portptr->location;
-		
+
 	}
 	else
 	{
@@ -3443,7 +3226,7 @@ void attack(struct player *from, struct player *to, int num_figs, char *buffer)
 	int random_sector=0;
 	int toshields;
 	int tofighters;
-	
+
 	if (ships[from->ship-1]->fighters < num_figs)
 	{
 		strcpy(buffer, "BAD: Not enough fighters!");
@@ -3459,7 +3242,7 @@ void attack(struct player *from, struct player *to, int num_figs, char *buffer)
 		strcpy(buffer, "BAD: Can't attack with more fighters than the ship can hold!");
 		return;
 	}
-	
+
 	defense = shiptypes[ships[to->ship-1]->type-1]->defense;
 	offense = shiptypes[ships[from->ship-1]->type-1]->offense;
 
@@ -3471,10 +3254,10 @@ void attack(struct player *from, struct player *to, int num_figs, char *buffer)
 		//new base number for amount attacker lost
 		attacker_lost = (float)num_figs*(float)num_figs/(float)ships[to->ship-1]->fighters;
 		attacker_lost = box_muller(attacker_lost, 0.05*attacker_lost);
-	
+
 		attack_lost = (int)attacker_lost;
 		defense_lost = (int)defender_lost;
-	
+
 		if (attack_lost > num_figs)
 			attack_lost = num_figs;
 	}
@@ -3492,7 +3275,7 @@ void attack(struct player *from, struct player *to, int num_figs, char *buffer)
 			captured = 0;
 			destroyed = 1;
 		}
-		
+
 	}
 	toshields = ships[to->ship-1]->shields;
 	tofighters = ships[to->ship-1]->fighters;
@@ -3510,12 +3293,12 @@ void attack(struct player *from, struct player *to, int num_figs, char *buffer)
       	if (to->sector == 0)
       	{
 		  		fprintf(stderr, "Removing player from sector %d\n", ships[to->ship-1]->location);
-        		to = delete (to->name, player, 
+        		to = delete (to->name, player,
 					sectors[ships[to->ship - 1]->location - 1]->playerlist,1);
 			}
 			else
       	{
-         	to = delete (to->name, player, 
+         	to = delete (to->name, player,
 					sectors[to->sector - 1]->playerlist, 1);
 			}
 			free(curship->name);
@@ -3538,14 +3321,14 @@ void attack(struct player *from, struct player *to, int num_figs, char *buffer)
       	{
 		  		fprintf(stderr, "Removing player from sector %d\n", ships[to->ship-1]->location);
 				oldlocation = ships[to->ship-1]->location;
-        		to = delete (to->name, player, 
+        		to = delete (to->name, player,
 					sectors[ships[to->ship - 1]->location - 1]->playerlist,1);
 				fprintf(stderr, "Player removed!\n");
 			}
 			else
       	{
 				oldlocation = to->sector;
-         	to = delete (to->name, player, 
+         	to = delete (to->name, player,
 					sectors[to->sector - 1]->playerlist, 1);
 			}
 		}
@@ -3554,7 +3337,7 @@ void attack(struct player *from, struct player *to, int num_figs, char *buffer)
 		sprintf(name, "%s's Gallileo #%d", to->name, loop);
 		done = 0;
 		fprintf(stderr, "Looking for %s\n", name);
-		while (!done) 
+		while (!done)
 			{
 				if ((curship =
 					(struct ship *)insert(name, ship, symbols, HASH_LENGTH)) == NULL)
@@ -3581,14 +3364,14 @@ void attack(struct player *from, struct player *to, int num_figs, char *buffer)
 				fprintf(stderr, "\nattack: Max ships reached! Whoa problems!");
             if (to->sector == 0)
             {
-               to = delete (to->name, player, 
+               to = delete (to->name, player,
 						sectors[ships[to->ship - 1]->location - 1]->playerlist,1);
                ships[to->ship - 1]->location = 1;
 					insertitem(to, player, sectors[ships[to->ship-1]->location-1]->playerlist,1);
             }
             else
             {
-               to = delete (to->name, player, 
+               to = delete (to->name, player,
 						sectors[to->sector - 1]->playerlist, 1);
                to->sector = 1;
 					insertitem(to, player, sectors[to->sector-1]->playerlist,1);
@@ -3605,7 +3388,7 @@ void attack(struct player *from, struct player *to, int num_figs, char *buffer)
 					curship->number = loop+1;
 					to->ship = curship->number;
 					done = 1;
-					
+
 				}
 				else
 				{
@@ -3696,4 +3479,3 @@ void attack(struct player *from, struct player *to, int num_figs, char *buffer)
 	//Move defender if not online
 	//send message to defender
 }
-

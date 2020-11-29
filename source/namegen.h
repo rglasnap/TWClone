@@ -101,7 +101,7 @@ char *nameCollection[] = { "Uncharted Space",
   "Zavijava", "Zubenelgenubi", "Zubeneshamali"
 };
 int usedNames[500];
-int nameCount;
+int nameCount = 0;
 
 
 char *firstSyllable[] = {	/* 100 */

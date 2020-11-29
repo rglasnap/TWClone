@@ -47,7 +47,9 @@ bigbang_SOURCES = \
 	parse.c \
 	parse.h \
 	planet.c \
-	planet.h
+	planet.h \
+	saveactions.c \
+	saveactions.h
 
 client_SOURCES = \
 	ansi.h \
@@ -79,6 +81,8 @@ server_SOURCES = \
 	player_interaction.h \
 	portinfo.h \
 	server.c \
+	saveactions.c \
+	saveactions.h \
 	serveractions.c \
 	serveractions.h \
 	shipinfo.c \

@@ -55,7 +55,7 @@ addint (char *list, int num, char delimiter, int maxlistsize)
       return;
     }
 
-  sprintf (temp, "%d%c", num, delimiter);
+  sprintf(temp, "%d%c", num, delimiter);
   temp[maxlistsize - strlen (list) - 1] = '\0';
   strcat (list, temp);
   free (temp);
