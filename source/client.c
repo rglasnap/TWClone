@@ -3605,174 +3605,173 @@ void doporting (int sockid, struct player *curplayer)
     //
 	 if (type==0)
 	 {
-		free(buffer);
 		do_ship_upgrade(sockid, curplayer);
-		return;
 	 }
-				
-    printf ("\n%sCommerce report for %s%s%s", KLTYLW, KLTCYN, name, KLTYLW);
-    printf ("\n");
-    //-=-=-         Docking Log        -=-=-
-    //<Ship name> docked <time> ago.
-    //
-    printf ("\n%s Items     Status\tTrading %% of max OnBoard", KGRN);
-    printf ("\n%s -----     ------\t------- -------- -------", KMAG);
-    printf ("\n%sFuel Ore   %s%s\t  %s%d\t  %s%d%s%%\t   %s%d", KLTCYN, KGRN,
-            status[0], KLTCYN, product[0], KGRN, (int) percentage[0], KLTRED,
-            KCYN, curplayer->pship->ore);
-    printf ("\n%sOrganics   %s%s\t  %s%d\t  %s%d%s%%\t   %s%d", KLTCYN, KGRN,
-            status[1], KLTCYN, product[1], KGRN, (int) percentage[1], KLTRED,
-            KCYN, curplayer->pship->organics);
-    printf ("\n%sEquipment  %s%s\t  %s%d\t  %s%d%s%%\t   %s%d", KLTCYN, KGRN,
-            status[2], KLTCYN, product[2], KGRN, (int) percentage[2], KLTRED,
-            KCYN, curplayer->pship->equipment);
-    printf ("\n");
-    for (counter = 0; counter <= 2; counter++)
-    {
-        if (product[counter] > playerproduct[counter])
-            testholds = playerproduct[counter];
-        else
-            testholds = product[counter];
-        if ((portconversion[type][counter] == 'B')
-                && (playerproduct[counter] > 0))
-        {
-            printf ("\n");
-            printf ("\n%sYou have %s%d%s credits and %s%d%s empty cargo holds.",
-                    KGRN, KLTCYN, curplayer->credits, KGRN, KLTCYN,
-                    curplayer->pship->emptyholds, KGRN);
-            printf ("\n");
+	 else
+	 {
 
-            printf
-            ("\n%sWe are buying up to %s%d%s. You have %s%d%s in your holds.",
-             KMAG, KLTYLW, product[counter], KMAG, KLTYLW,
-             playerproduct[counter], KMAG);
-            printf ("\n%sHow many holds of %s%s do you want to sell [%s%d%s]? ",
-                    KMAG, pnames[counter], KMAG, KLTYLW, testholds, KMAG);
-            scanf ("%d", &holds);
-					
-            if (holds > 0 && playerproduct[counter] == holds)
-            {
-                printf ("\n%sAgreed, %s%d%s units.", KLTCYN, KLTYLW, holds,
-                        KLTCYN);
-                *buffer = '\0';
-                strcpy (buffer, "PORT TRADE:");
-                addint (buffer, counter, ':', BUFF_SIZE);
-                addint (buffer, holds, ':', BUFF_SIZE);
-                addint (buffer, 0, ':', BUFF_SIZE);
-                sendinfo (sockid, buffer);
-                *buffer = '\0';
-                recvinfo (sockid, buffer);
-                offered = popint (buffer, ":");
-                accepted = popint (buffer, ":");
-                xpgained = popint (buffer, ":");
-                do
-                {
-                    printf ("\n");
-                    printf ("\n%sWe'll buy them for %s%d%s credits.", KGRN,
-                            KLTYLW, offered, KGRN);
-                    printf ("\n%sYour offer [%s%d%s]? ", KMAG, KLTYLW, offered,
-                            KMAG);
-                    scanf ("%d", &playerprice);
-                    *buffer = '\0';
-                    strcpy (buffer, "PORT TRADE:");
-                    addint (buffer, counter, ':', BUFF_SIZE);
-                    addint (buffer, holds, ':', BUFF_SIZE);
-                    addint (buffer, playerprice, ':', BUFF_SIZE);
-                    sendinfo (sockid, buffer);
-                    *buffer = '\0';
-                    recvinfo (sockid, buffer);
-                    offered = popint (buffer, ":");
-                    accepted = popint (buffer, ":");
-                    xpgained = popint (buffer, ":");
-						  if (accepted == -1)
-							accepted = 1;
-                }
-                while (!accepted);
-                if (xpgained > 0)
-                    printf
-                    ("\n%sFor your great trading you receive %s%d%s experience point(s).",
-                     KGRN, KLTYLW, xpgained, KGRN);
-                getmyinfo (sockid, curplayer);
-            }
-        }
-    }
-    for (counter = 0; counter <= 2; counter++)
-    {
-        if (curplayer->pship->emptyholds == 0)
-            break;
-        if ((strncmp (status[counter], "Selling", 7) == 0))
-        {
-            strcpy (buffer, "PORT TRADE:");
-            addint (buffer, counter, ':', BUFF_SIZE);
-            addint (buffer, 1, ':', BUFF_SIZE);
-            addint (buffer, -1, ':', BUFF_SIZE);	//Get a test price
-            sendinfo (sockid, buffer);
-            *buffer = '\0';
-            recvinfo (sockid, buffer);
-            offered = popint (buffer, ":");
-            accepted = popint (buffer, ":");
-            xpgained = popint (buffer, ":");
-            if (curplayer->pship->emptyholds < curplayer->credits / offered)
-                testholds = curplayer->pship->emptyholds;
-            else
-                testholds = curplayer->credits / offered;
-            printf ("\n");
-            printf ("\n%sYou have %s%d%s credits and %s%d%s empty cargo holds.",
-                    KGRN, KLTCYN, curplayer->credits, KGRN, KLTCYN,
-                    curplayer->pship->emptyholds, KGRN);
-            printf ("\n");
-            printf
-            ("\n%sWe are selling up to %s%d%s. You have %s%d%s in your holds.",
-             KMAG, KLTYLW, product[counter], KMAG, KLTYLW,
-             playerproduct[counter], KMAG);
-            printf ("\n%sHow many holds of %s%s do you want to buy [%s%d%s]? ",
-                    KMAG, pnames[counter], KMAG, KLTYLW, testholds, KMAG);
-            scanf ("%d", &holds);
-            if (holds > 0 && (curplayer->pship->emptyholds >= holds))
-            {
-                printf ("\n%sAgreed, %s%d%s units.", KLTCYN, KLTYLW, holds,
-                        KLTCYN);
-                *buffer = '\0';
-                strcpy (buffer, "PORT TRADE:");
-                addint (buffer, counter, ':', BUFF_SIZE);
-                addint (buffer, holds, ':', BUFF_SIZE);
-                addint (buffer, 0, ':', BUFF_SIZE);
-                sendinfo (sockid, buffer);
-                *buffer = '\0';
-                recvinfo (sockid, buffer);
-                offered = popint (buffer, ":");
-                accepted = popint (buffer, ":");
-                xpgained = popint (buffer, ":");
-                do
-                {
-                    printf ("\n");
-                    printf ("\n%sWe'll sell them for %s%d%s credits.", KGRN,
-                            KLTYLW, offered, KGRN);
-                    printf ("\n%sYour offer [%s%d%s]? ", KMAG, KLTYLW, offered,
-                            KMAG);
-                    scanf ("%d", &playerprice);
-                    *buffer = '\0';
-                    strcpy (buffer, "PORT TRADE:");
-                    addint (buffer, counter, ':', BUFF_SIZE);
-                    addint (buffer, holds, ':', BUFF_SIZE);
-                    addint (buffer, playerprice, ':', BUFF_SIZE);
-                    sendinfo (sockid, buffer);
-                    *buffer = '\0';
-                    recvinfo (sockid, buffer);
-                    offered = popint (buffer, ":");
-                    accepted = popint (buffer, ":");
-                    xpgained = popint (buffer, ":");
-						  if (accepted == -1)
-								accepted = 1;
-                }
-                while (!accepted);
-                if (xpgained > 0)
-                    printf("\n%sFor your great trading you receive %s%d%s experience point(s).",
-                     KGRN, KLTYLW, xpgained, KGRN);
-                getmyinfo (sockid, curplayer);
-            }
-        }
-    }
+		 printf("\n%sCommerce report for %s%s%s", KLTYLW, KLTCYN, name, KLTYLW);
+		 printf("\n");
+		 //-=-=-         Docking Log        -=-=-
+		 //<Ship name> docked <time> ago.
+		 //
+		 printf("\n%s Items     Status\tTrading %% of max OnBoard", KGRN);
+		 printf("\n%s -----     ------\t------- -------- -------", KMAG);
+		 printf("\n%sFuel Ore   %s%s\t  %s%d\t  %s%d%s%%\t   %s%d", KLTCYN, KGRN,
+			 status[0], KLTCYN, product[0], KGRN, (int)percentage[0], KLTRED,
+			 KCYN, curplayer->pship->ore);
+		 printf("\n%sOrganics   %s%s\t  %s%d\t  %s%d%s%%\t   %s%d", KLTCYN, KGRN,
+			 status[1], KLTCYN, product[1], KGRN, (int)percentage[1], KLTRED,
+			 KCYN, curplayer->pship->organics);
+		 printf("\n%sEquipment  %s%s\t  %s%d\t  %s%d%s%%\t   %s%d", KLTCYN, KGRN,
+			 status[2], KLTCYN, product[2], KGRN, (int)percentage[2], KLTRED,
+			 KCYN, curplayer->pship->equipment);
+		 printf("\n");
+		 for (counter = 0; counter <= 2; counter++)
+		 {
+			 if (product[counter] > playerproduct[counter])
+				 testholds = playerproduct[counter];
+			 else
+				 testholds = product[counter];
+			 if ((portconversion[type][counter] == 'B')
+				 && (playerproduct[counter] > 0))
+			 {
+				 printf("\n");
+				 printf("\n%sYou have %s%d%s credits and %s%d%s empty cargo holds.",
+					 KGRN, KLTCYN, curplayer->credits, KGRN, KLTCYN,
+					 curplayer->pship->emptyholds, KGRN);
+				 printf("\n");
+
+				 printf
+				 ("\n%sWe are buying up to %s%d%s. You have %s%d%s in your holds.",
+					 KMAG, KLTYLW, product[counter], KMAG, KLTYLW,
+					 playerproduct[counter], KMAG);
+				 printf("\n%sHow many holds of %s%s do you want to sell [%s%d%s]? ",
+					 KMAG, pnames[counter], KMAG, KLTYLW, testholds, KMAG);
+				 scanf("%d", &holds);
+
+				 if (holds > 0 && playerproduct[counter] == holds)
+				 {
+					 printf("\n%sAgreed, %s%d%s units.", KLTCYN, KLTYLW, holds,
+						 KLTCYN);
+					 *buffer = '\0';
+					 strcpy(buffer, "PORT TRADE:");
+					 addint(buffer, counter, ':', BUFF_SIZE);
+					 addint(buffer, holds, ':', BUFF_SIZE);
+					 addint(buffer, 0, ':', BUFF_SIZE);
+					 sendinfo(sockid, buffer);
+					 *buffer = '\0';
+					 recvinfo(sockid, buffer);
+					 offered = popint(buffer, ":");
+					 accepted = popint(buffer, ":");
+					 xpgained = popint(buffer, ":");
+					 do
+					 {
+						 printf("\n");
+						 printf("\n%sWe'll buy them for %s%d%s credits.", KGRN,
+							 KLTYLW, offered, KGRN);
+						 printf("\n%sYour offer [%s%d%s]? ", KMAG, KLTYLW, offered,
+							 KMAG);
+						 scanf("%d", &playerprice);
+						 *buffer = '\0';
+						 strcpy(buffer, "PORT TRADE:");
+						 addint(buffer, counter, ':', BUFF_SIZE);
+						 addint(buffer, holds, ':', BUFF_SIZE);
+						 addint(buffer, playerprice, ':', BUFF_SIZE);
+						 sendinfo(sockid, buffer);
+						 *buffer = '\0';
+						 recvinfo(sockid, buffer);
+						 offered = popint(buffer, ":");
+						 accepted = popint(buffer, ":");
+						 xpgained = popint(buffer, ":");
+						 if (accepted == -1)
+							 accepted = 1;
+					 } while (!accepted);
+					 if (xpgained > 0)
+						 printf
+						 ("\n%sFor your great trading you receive %s%d%s experience point(s).",
+							 KGRN, KLTYLW, xpgained, KGRN);
+					 getmyinfo(sockid, curplayer);
+				 }
+			 }
+		 }
+		 for (counter = 0; counter <= 2; counter++)
+		 {
+			 if (curplayer->pship->emptyholds == 0)
+				 break;
+			 if ((strncmp(status[counter], "Selling", 7) == 0))
+			 {
+				 strcpy(buffer, "PORT TRADE:");
+				 addint(buffer, counter, ':', BUFF_SIZE);
+				 addint(buffer, 1, ':', BUFF_SIZE);
+				 addint(buffer, -1, ':', BUFF_SIZE);	//Get a test price
+				 sendinfo(sockid, buffer);
+				 *buffer = '\0';
+				 recvinfo(sockid, buffer);
+				 offered = popint(buffer, ":");
+				 accepted = popint(buffer, ":");
+				 xpgained = popint(buffer, ":");
+				 if (curplayer->pship->emptyholds < curplayer->credits / offered)
+					 testholds = curplayer->pship->emptyholds;
+				 else
+					 testholds = curplayer->credits / offered;
+				 printf("\n");
+				 printf("\n%sYou have %s%d%s credits and %s%d%s empty cargo holds.",
+					 KGRN, KLTCYN, curplayer->credits, KGRN, KLTCYN,
+					 curplayer->pship->emptyholds, KGRN);
+				 printf("\n");
+				 printf
+				 ("\n%sWe are selling up to %s%d%s. You have %s%d%s in your holds.",
+					 KMAG, KLTYLW, product[counter], KMAG, KLTYLW,
+					 playerproduct[counter], KMAG);
+				 printf("\n%sHow many holds of %s%s do you want to buy [%s%d%s]? ",
+					 KMAG, pnames[counter], KMAG, KLTYLW, testholds, KMAG);
+				 scanf("%d", &holds);
+				 if (holds > 0 && (curplayer->pship->emptyholds >= holds))
+				 {
+					 printf("\n%sAgreed, %s%d%s units.", KLTCYN, KLTYLW, holds,
+						 KLTCYN);
+					 *buffer = '\0';
+					 strcpy(buffer, "PORT TRADE:");
+					 addint(buffer, counter, ':', BUFF_SIZE);
+					 addint(buffer, holds, ':', BUFF_SIZE);
+					 addint(buffer, 0, ':', BUFF_SIZE);
+					 sendinfo(sockid, buffer);
+					 *buffer = '\0';
+					 recvinfo(sockid, buffer);
+					 offered = popint(buffer, ":");
+					 accepted = popint(buffer, ":");
+					 xpgained = popint(buffer, ":");
+					 do
+					 {
+						 printf("\n");
+						 printf("\n%sWe'll sell them for %s%d%s credits.", KGRN,
+							 KLTYLW, offered, KGRN);
+						 printf("\n%sYour offer [%s%d%s]? ", KMAG, KLTYLW, offered,
+							 KMAG);
+						 scanf("%d", &playerprice);
+						 *buffer = '\0';
+						 strcpy(buffer, "PORT TRADE:");
+						 addint(buffer, counter, ':', BUFF_SIZE);
+						 addint(buffer, holds, ':', BUFF_SIZE);
+						 addint(buffer, playerprice, ':', BUFF_SIZE);
+						 sendinfo(sockid, buffer);
+						 *buffer = '\0';
+						 recvinfo(sockid, buffer);
+						 offered = popint(buffer, ":");
+						 accepted = popint(buffer, ":");
+						 xpgained = popint(buffer, ":");
+						 if (accepted == -1)
+							 accepted = 1;
+					 } while (!accepted);
+					 if (xpgained > 0)
+						 printf("\n%sFor your great trading you receive %s%d%s experience point(s).",
+							 KGRN, KLTYLW, xpgained, KGRN);
+					 getmyinfo(sockid, curplayer);
+				 }
+			 }
+		 }
+	 }
     printf ("\n");
     printf ("\n%sYou have %s%d%s credits and %s%d%s empty cargo holds.", KGRN,
             KLTCYN, curplayer->credits, KGRN, KLTCYN,
