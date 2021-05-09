@@ -127,7 +127,7 @@ am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(pkgdatadir)"
 PROGRAMS = $(bin_PROGRAMS)
 am_bigbang_OBJECTS = bigbang.$(OBJEXT) baseconfig.$(OBJEXT) \
 	getopt.$(OBJEXT) namegen.$(OBJEXT) parse.$(OBJEXT) \
-	planet.$(OBJEXT)
+	planet.$(OBJEXT) saveactions.$(OBJEXT)
 bigbang_OBJECTS = $(am_bigbang_OBJECTS)
 bigbang_LDADD = $(LDADD)
 am_client_OBJECTS = client.$(OBJEXT) common.$(OBJEXT) parse.$(OBJEXT)
@@ -137,8 +137,9 @@ am_server_OBJECTS = boxmuller.$(OBJEXT) common.$(OBJEXT) \
 	baseconfig.$(OBJEXT) hashtable.$(OBJEXT) maint.$(OBJEXT) \
 	msgqueue.$(OBJEXT) parse.$(OBJEXT) planet.$(OBJEXT) \
 	player_interaction.$(OBJEXT) server.$(OBJEXT) \
-	serveractions.$(OBJEXT) shipinfo.$(OBJEXT) \
-	sysop_interaction.$(OBJEXT) universe.$(OBJEXT)
+	saveactions.$(OBJEXT) serveractions.$(OBJEXT) \
+	shipinfo.$(OBJEXT) sysop_interaction.$(OBJEXT) \
+	universe.$(OBJEXT)
 server_OBJECTS = $(am_server_OBJECTS)
 server_LDADD = $(LDADD)
 am_test_client_OBJECTS = common.$(OBJEXT) test_client.$(OBJEXT)
@@ -364,7 +365,9 @@ bigbang_SOURCES = \
 	parse.c \
 	parse.h \
 	planet.c \
-	planet.h
+	planet.h \
+	saveactions.c \
+	saveactions.h
 
 client_SOURCES = \
 	ansi.h \
@@ -396,6 +399,8 @@ server_SOURCES = \
 	player_interaction.h \
 	portinfo.h \
 	server.c \
+	saveactions.c \
+	saveactions.h \
 	serveractions.c \
 	serveractions.h \
 	shipinfo.c \
@@ -550,6 +555,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/parse.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/planet.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/player_interaction.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/saveactions.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/server.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/serveractions.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/shipinfo.Po@am__quote@
