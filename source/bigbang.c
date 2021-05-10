@@ -244,8 +244,8 @@ int main (int argc, char **argv)
     init_usedNames ();
 
     /*  Reading config.data file for config data (Duh...) */
-    printf ("\nReading in config.data...");
-    (void) init_config ("config.data");
+    printf ("\nReading in baseconfig.data...");
+    (void) init_config ("baseconfig.data");
 	 maxWarps = configdata->maxwarps;
     printf ("done.\n");
 
